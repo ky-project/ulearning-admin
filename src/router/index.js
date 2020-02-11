@@ -37,26 +37,6 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
-  /* {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  }, */
-
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard', icon: 'dashboard' }
-      }
-    ]
-  },
   {
     path: '/personal',
     component: Layout,
@@ -72,57 +52,42 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/teacher-manage',
+    path: '/',
     component: Layout,
+    redirect: '/dashboard',
     children: [
       {
-        path: 'index',
-        name: 'TeacherManage',
-        component: () => import('@/views/teacherManage/index'),
-        meta: { title: '教师管理', icon: 'jiaoshi' }
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
   },
   {
-    path: '/student-manage',
+    path: '/system-manage',
+    name: 'SystemManage',
     component: Layout,
+    meta: { title: '系统管理', icon: 'xitongguanli' },
     children: [
       {
-        path: 'index',
+        path: 'student-manage',
         name: 'StudentManage',
         component: () => import('@/views/studentManage/index'),
         meta: { title: '学生管理', icon: 'yonghu' }
-      }
-    ]
-  },
-  {
-    path: '/course-manage',
-    component: Layout,
-    children: [
+      },
       {
-        path: 'index',
-        name: 'CourseManage',
-        component: () => import('@/views/courseManage/index'),
-        meta: { title: '课程管理', icon: 'kechengbiao' }
-      }
-    ]
-  },
-  {
-    path: '/teaching-task-manage',
-    component: Layout,
-    children: [
+        path: 'teacher-manage',
+        name: 'TeacherManage',
+        component: () => import('@/views/teacherManage/index'),
+        meta: { title: '教师管理', icon: 'jiaoshi' }
+      },
       {
-        path: 'index',
-        name: 'CourseManage',
-        component: () => import('@/views/teachingTaskManage/index'),
-        meta: { title: '教学任务管理', icon: 'renwu' }
-      }
-    ]
-  },
-  {
-    path: '/rights-manage',
-    component: Layout,
-    children: [
+        path: 'role-manage',
+        name: 'RoleManage',
+        component: () => import('@/views/roleManage/index'),
+        meta: { title: '角色管理', icon: 'role' }
+      },
       {
         path: 'index',
         name: 'RightsManage',
@@ -132,48 +97,48 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/role-manage',
+    path: '/function-module',
+    name: 'FunctionModule',
     component: Layout,
+    meta: { title: '功能模块', icon: 'gongneng' },
     children: [
       {
-        path: 'index',
-        name: 'RoleManage',
-        component: () => import('@/views/roleManage/index'),
-        meta: { title: '角色管理', icon: 'role' }
+        path: 'course-manage',
+        name: 'CourseManage',
+        component: () => import('@/views/courseManage/index'),
+        meta: { title: '课程管理', icon: 'kechengbiao' }
+      },
+      {
+        path: 'teaching-task-manage',
+        name: 'TeachingTaskManage',
+        component: () => import('@/views/teachingTaskManage/index'),
+        meta: { title: '教学任务管理', icon: 'renwu' }
       }
     ]
   },
   {
-    path: '/role-assignment',
+    path: 'monitor-manage',
+    name: 'MonitorManage',
     component: Layout,
+    meta: { title: '监控管理', icon: 'jiankong' },
     children: [
       {
-        path: 'index',
-        name: 'RoleAssignment',
-        component: () => import('@/views/roleAssignment/index'),
-        meta: { title: '角色分配', icon: 'fenpei' }
-      }
-    ]
-  },
-  {
-    path: '/log-monitor',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
+        path: 'log-monitor',
         name: 'LogMonitor',
         component: () => import('@/views/logMonitor/index'),
-        meta: { title: '日志监控', icon: 'rizhi' }
-      }
-    ]
-  },
-  {
-    path: 'monitor-manage-link',
-    component: Layout,
-    children: [
+        meta: { title: '日志管理', icon: 'rizhi' }
+      },
       {
         path: 'http://ky.darren1112.com:8082/monitor-manage/',
-        meta: { title: '监控管理', icon: 'jiankong' }
+        meta: { title: '监控系统', icon: 'jiankongmianban' }
+      },
+      {
+        path: 'http://ky.darren1112.com:8082/monitor-manage/',
+        meta: { title: '任务调度中心', icon: 'renwutiaodu' }
+      },
+      {
+        path: 'http://ky.darren1112.com:8082/monitor-manage/',
+        meta: { title: '文件管理', icon: 'wenjianguanli' }
       }
     ]
   },
@@ -183,9 +148,14 @@ export const constantRoutes = [
     children: [
       {
         path: 'http://ky.darren1112.com:8082/doc.html',
-        meta: { title: '开发管理', icon: 'kaifa' }
+        meta: { title: '开发文档', icon: 'wendang' }
       }
     ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
