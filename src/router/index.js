@@ -69,6 +69,7 @@ export const constantRoutes = [
     name: 'SystemManage',
     component: Layout,
     meta: { title: '系统管理', icon: 'xitongguanli' },
+    redirect: 'noRedirect',
     children: [
       {
         path: 'student-manage',
@@ -89,7 +90,7 @@ export const constantRoutes = [
         meta: { title: '角色管理', icon: 'role' }
       },
       {
-        path: 'index',
+        path: 'rights-manage',
         name: 'RightsManage',
         component: () => import('@/views/rightsManage/index'),
         meta: { title: '权限管理', icon: 'quanxian' }
@@ -101,6 +102,7 @@ export const constantRoutes = [
     name: 'FunctionModule',
     component: Layout,
     meta: { title: '功能模块', icon: 'gongneng' },
+    redirect: 'noRedirect',
     children: [
       {
         path: 'course-manage',
@@ -117,10 +119,11 @@ export const constantRoutes = [
     ]
   },
   {
-    path: 'monitor-manage',
+    path: '/monitor-manage',
     name: 'MonitorManage',
     component: Layout,
     meta: { title: '监控管理', icon: 'jiankong' },
+    redirect: 'noRedirect',
     children: [
       {
         path: 'log-monitor',
@@ -133,11 +136,11 @@ export const constantRoutes = [
         meta: { title: '监控系统', icon: 'jiankongmianban' }
       },
       {
-        path: 'http://ky.darren1112.com:8082/monitor-manage/',
+        path: 'http://???',
         meta: { title: '任务调度中心', icon: 'renwutiaodu' }
       },
       {
-        path: 'http://ky.darren1112.com:8082/monitor-manage/',
+        path: 'http://????',
         meta: { title: '文件管理', icon: 'wenjianguanli' }
       }
     ]
