@@ -5,13 +5,13 @@
         U-Learning——Studying With Anytime, Anywhere, Anyone, Anydevice, Anything
         <br>
         <br>
-         <a href="https://github.com/Daye1112/u-learning">
+         <a href="https://github.com/stone4321/ulearning-admin">
              <img src="https://img.shields.io/github/watchers/stone4321/ulearning-admin?style=social" >
          </a>
-         <a href="https://github.com/Daye1112/u-learning">
+         <a href="https://github.com/stone4321/ulearning-admin">
              <img src="https://img.shields.io/github/stars/stone4321/ulearning-admin?style=social" >
          </a>
-         <a href="https://github.com/Daye1112/u-learning">
+         <a href="https://github.com/stone4321/ulearning-admin">
              <img src="https://img.shields.io/github/forks/stone4321/ulearning-admin?style=social" >
          </a>
     </p>    
