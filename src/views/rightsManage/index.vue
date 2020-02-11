@@ -1,18 +1,19 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.teaName" placeholder="姓名" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.teaNumber" placeholder="工号" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.teaDept" placeholder="系部" style="width: 200px;" class="filter-item" />
-      <!--  <el-select
-        v-model="listQuery.sort"
-        style="width: 140px"
+      <el-select
+        v-model="listQuery.permissionGroup"
+        style="width: 200px"
         class="filter-item"
-        placeholder="部门"
+        placeholder="权限组"
         @change="handleFilter"
       >
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select> -->
+        <el-option v-for="item in rightsGroup" :key="item" :label="item" :value="item" />
+      </el-select>
+      <el-input v-model="listQuery.permissionName" class="filter-item" style="width: 200px" placeholder="权限名" />
+      <el-button v-waves class="filter-item" type="primary" @click="handleReset">
+        重置
+      </el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -30,39 +31,29 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="工号" prop="teaNumber" align="center" width="120">
+      <el-table-column label="权限组" align="center" min-width="100">
         <template slot-scope="{row}">
-          <span>{{ row.teaNumber }}</span>
+          <span>{{ row.permissionGroup }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" min-width="120" align="center">
+      <el-table-column label="权限名" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.teaName }}</span>
+          <span>{{ row.permissionName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="性别" min-width="50" align="center">
+      <el-table-column label="权限码" min-width="120" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.teaGender }}</span>
+          <span>{{ row.permissionSource }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="系部" min-width="120" align="center">
+      <el-table-column label="权限url" min-width="160" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.teaDept }}</span>
+          <span>{{ row.permissionUrl }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="职称" min-width="100" align="center">
+      <el-table-column label="更新时间" min-width="160" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.teaTitle }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="电话" min-width="120" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.teaPhone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="邮箱" align="center" min-width="200">
-        <template slot-scope="{row}">
-          <span>{{ row.teaEmail }}</span>
+          <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
@@ -94,35 +85,21 @@
         label-position="left"
         label-width="70px"
       >
-        <el-form-item label="工号" prop="teaNumber">
-          <el-input v-model="temp.teaNumber" />
+        <el-form-item label="权限组" prop="permissionGroup">
+          <el-autocomplete
+            v-model="temp.permissionGroup"
+            :style="{width: '100%'}"
+            :fetch-suggestions="querySearch"
+          />
         </el-form-item>
-        <el-form-item label="姓名" prop="teaName">
-          <el-input v-model="temp.teaName" />
+        <el-form-item label="权限名" prop="permissionName">
+          <el-input v-model="temp.permissionName" />
         </el-form-item>
-        <el-form-item label="性别" prop="teaGender">
-          <el-select v-model="temp.teaGender" class="filter-item">
-            <el-option label="男" value="男" />
-            <el-option label="女" value="女" />
-          </el-select>
+        <el-form-item label="权限码" prop="permissionSource">
+          <el-input v-model="temp.permissionSource" />
         </el-form-item>
-        <el-form-item label="系部" prop="teaDept">
-          <el-input v-model="temp.teaDept" />
-        </el-form-item>
-        <!-- <el-form-item label="系部" prop="teaDept">
-          <el-select v-model="temp.teaDept" class="filter-item">
-            <el-option label="机电系" value="机电系" />
-            <el-option label="纺服系" value="纺服系" />
-          </el-select>
-        </el-form-item> -->
-        <el-form-item label="职称" prop="teaTitle">
-          <el-input v-model="temp.teaTitle" />
-        </el-form-item>
-        <el-form-item label="电话" prop="teaPhone">
-          <el-input v-model="temp.teaPhone" />
-        </el-form-item>
-        <el-form-item label="邮箱" prop="teaEmail">
-          <el-input v-model="temp.teaEmail" />
+        <el-form-item label="权限url" prop="permissionUrl">
+          <el-input v-model="temp.permissionUrl" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -134,77 +111,21 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <!-- <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
 <script>
-// import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-// import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { isEmail, isPhone } from '@/utils/validate'
-import { getTeacherPageList, updateTeacher, addTeacher, deleteTeacher } from '@/api/teacher-manage'
-
-/* const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-] */
-
-// arr to obj, such as { CN : "China", US : "USA" }
-/* const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {}) */
+import { getAllRightsGroup, getRightsPageList, deleteRights, addRights, updateRights } from '@/api/rights-manage'
 
 export default {
   name: 'RightsManage',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    /* statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    } */
-  },
   data() {
-    const checkPhone = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('teaPhone is required'))
-      } else if (!isPhone(value)) {
-        return callback(new Error('手机格式有误!'))
-      } else {
-        return callback()
-      }
-    }
-    const checkEmail = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('teaEmail is required'))
-      } else if (!isEmail(value)) {
-        return callback(new Error('邮箱格式有误!'))
-      } else {
-        return callback()
-      }
-    }
     return {
+      rightsGroup: [],
       tableKey: 0,
       list: null,
       total: 0,
@@ -212,120 +133,87 @@ export default {
       listQuery: {
         currentPage: 1,
         pageSize: 5,
-        teaName: '',
-        teaNumber: '',
-        teaDept: ''
+        permissionGroup: '',
+        permissionName: ''
       },
       temp: {
         id: '',
-        teaDept: '',
-        teaGender: '',
-        teaName: '',
-        teaNumber: '',
-        teaTitle: '',
-        teaPhone: '',
-        teaEmail: ''
+        permissionGroup: '',
+        permissionName: '',
+        permissionSource: '',
+        permissionUrl: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '修改教师信息',
-        create: '添加教师'
+        update: '修改权限信息',
+        create: '添加权限'
       },
       rules: {
-        teaDept: [{ required: true, message: '请输入系部', trigger: 'blur' }],
-        teaGender: [{ required: true, message: '请选择性别', trigger: 'change' }],
-        teaName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        teaNumber: [{ required: true, message: '请输入工号', trigger: 'blur' }],
-        teaTitle: [{ required: true, message: '请输入职称', trigger: 'blur' }],
-        teaPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
-        teaEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
+        permissionGroup: [{ required: true, message: '请输入权限组', trigger: ['blur', 'change'] }],
+        permissionName: [{ required: true, message: '请输入权限名', trigger: 'blur' }],
+        permissionSource: [{ required: true, message: '请输入权限码', trigger: 'blur' }],
+        permissionUrl: [{ required: true, message: '请输入权限url', trigger: 'blur' }]
       }
-      /* dialogPvVisible: false,
-      pvData: [],
-      downloadLoading: false */
     }
   },
-  /* computed: {
-    page: {
-      get() {
-        return this.listQuery.currentPage
-      },
-      set(val) {
-        this.listQuery.currentPage = val
-      }
-    },
-    limit: {
-      get() {
-        return this.listQuery.pageSize
-      },
-      set(val) {
-        this.listQuery.pageSize = val
-      }
-    }
-  }, */
   created() {
     this.getList()
+    this.getAllRightsGroup()
   },
   methods: {
+    handleReset() {
+      this.listQuery.courseId = ''
+      this.listQuery.permissionGroup = ''
+      this.listQuery.permissionName = ''
+    },
+    querySearch(queryString, cb) {
+      const { rightsGroup } = this
+      const rightsList = rightsGroup.map(item => ({ value: item }))
+      const queryExp = new RegExp(queryString)
+      var results = queryString ? rightsList.filter(item => queryExp.test(item.value)) : rightsList
+      console.log('results', results)
+      return cb(results)
+    },
     updatePage(val) {
       this.listQuery.currentPage = val
     },
     updateLimit(val) {
       this.listQuery.pageSize = val
     },
+    getAllRightsGroup() {
+      getAllRightsGroup()
+        .then(response => {
+          const { data } = response
+          this.rightsGroup = data
+        })
+    },
     getList() {
       this.listLoading = true
-      console.log('listQuery', this.listQuery)
-      getTeacherPageList(this.listQuery)
+      // console.log('listQuery', this.listQuery)
+      const { listQuery } = this
+      getRightsPageList(listQuery)
         .then(response => {
           const { content, total } = response.data
-          console.log('content', content)
           this.list = content
           this.total = total
           this.listLoading = false
         })
     },
     setPagination(currentPage, pageSize) {
-      // this.listQuery.currentPage = currentPage
-      // this.listQuery.pageSize = pageSize
       this.getList()
     },
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
     },
-    /* handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },*/
     resetTemp() {
       this.temp = {
-        'id': '',
-        'teaDept': '', // 系部
-        'teaEmail': '', // 邮箱
-        'teaGender': '', // 性别
-        'teaName': '', // 姓名
-        'teaNumber': '', // 工号
-        'teaPhone': '', // 电话
-        'teaTitle': '' // 职称
+        id: '',
+        permissionGroup: '',
+        permissionName: '',
+        permissionSource: '',
+        permissionUrl: ''
       }
     },
     handleCreate() {
@@ -337,15 +225,13 @@ export default {
       })
     },
     createData() {
-      console.log('添加数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          // 1. 添加教师
-          addTeacher(this.temp)
+          addRights(this.temp)
             .then(response => {
               this.$message({
                 type: 'success',
-                message: '教师添加成功'
+                message: '权限添加成功'
               })
               this.getList()
               this.dialogFormVisible = false
@@ -362,16 +248,13 @@ export default {
       })
     },
     updateData() {
-      // console.log('更新数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log('校验成功')
-          // 1. 发送请求
-          updateTeacher(this.temp)
+          updateRights(this.temp)
             .then(response => {
               this.$message({
                 type: 'success',
-                message: '教师信息更新成功'
+                message: '权限信息更新成功'
               })
               this.getList()
               this.dialogFormVisible = false
@@ -380,13 +263,13 @@ export default {
       })
     },
     handleDelete(row, index) {
-      this.$confirm('确定永久删除该教师, 是否继续?', '提示', {
+      this.$confirm('确定永久删除该权限, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         // 发送请求
-        deleteTeacher({ id: row.id })
+        deleteRights({ id: row.id })
           .then(response => {
             this.$message({
               type: 'success',
