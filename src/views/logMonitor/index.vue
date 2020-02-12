@@ -30,6 +30,9 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
+      <el-button v-waves class="filter-item fr" type="primary" icon="el-icon-download" @click="handleDownload()">
+        历史日志下载
+      </el-button>
     </div>
 
     <el-table
@@ -94,13 +97,29 @@
       class="fr"
       @pagination="setPagination"
     />
+
+    <el-dialog title="历史日志"
+               :visible.sync="dialogFormVisible"
+               width="30%">
+        <el-radio-group v-model="logHistoryId">
+          <el-radio v-for="item in logHistoryList" :key="item.id" :label="item.id">{{item.logHistoryDate}}</el-radio>
+        </el-radio-group>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="downLoadLogFile()">
+          下载
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getLogTypeList, getLogPageList } from '@/api/log-monitor'
+import { getLogTypeList, getLogPageList, getLogHistoryList, downloadLogHistoryFile } from '@/api/log-monitor'
 
 export default {
   name: 'LogMonitor',
@@ -120,7 +139,9 @@ export default {
         logType: '',
         createTime: ''
       },
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      logHistoryList: [],
+      logHistoryId: ''
     }
   },
   created() {
@@ -164,6 +185,17 @@ export default {
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
+    },
+    // 下载历史文件弹窗
+    handleDownload() {
+      this.dialogFormVisible = true
+      getLogHistoryList()
+        .then(response => {
+          this.logHistoryList = response.data;
+        })
+    },
+    downLoadLogFile() {
+      window.location.href = process.env.VUE_APP_BASE_API + `/monitor-manage/logHistory/download?id=${this.logHistoryId}`
     }
   }
 }
