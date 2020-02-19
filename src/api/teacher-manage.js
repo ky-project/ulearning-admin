@@ -45,3 +45,20 @@ export function getTeacherPageList(data) {
   })
 }
 
+// 查询教师角色
+export function getAssignedRole(data) {
+  const params = qs.stringify(data)
+  return request({
+    url: `/system-manage/teacher/getAssignedRole?${params}`,
+    method: 'GET'
+  })
+}
+
+// 分配教师角色
+export function saveAssignedRole(data) {
+  return request({
+    url: '/system-manage/teacher/saveAssignedRole',
+    method: 'POST',
+    data: qs.stringify(data)
+  })
+}

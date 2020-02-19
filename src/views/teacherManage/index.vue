@@ -4,15 +4,6 @@
       <el-input v-model="listQuery.teaName" placeholder="姓名" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.teaNumber" placeholder="工号" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.teaDept" placeholder="系部" style="width: 200px;" class="filter-item" />
-      <!--  <el-select
-        v-model="listQuery.sort"
-        style="width: 140px"
-        class="filter-item"
-        placeholder="部门"
-        @change="handleFilter"
-      >
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select> -->
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -65,8 +56,11 @@
           <span>{{ row.teaEmail }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
+          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="showPopTransfer(row)">
+            <svg-icon icon-class="jiaosexiugai" />
+          </el-button>
           <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="handleUpdate(row)">
             <i class="el-icon-edit" />
           </el-button>
@@ -109,12 +103,6 @@
         <el-form-item label="系部" prop="teaDept">
           <el-input v-model="temp.teaDept" />
         </el-form-item>
-        <!-- <el-form-item label="系部" prop="teaDept">
-          <el-select v-model="temp.teaDept" class="filter-item">
-            <el-option label="机电系" value="机电系" />
-            <el-option label="纺服系" value="纺服系" />
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="职称" prop="teaTitle">
           <el-input v-model="temp.teaTitle" />
         </el-form-item>
@@ -134,57 +122,30 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <!-- <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog> -->
+    <pop-transfer
+      v-model="chooseList"
+      pop-title="分配角色"
+      :list-titles="['角色池', '已选项']"
+      :data="rolesList"
+      :visible="visible"
+      :on-close="close"
+      :on-submit="updateRoles"
+    />
   </div>
 </template>
 
 <script>
-// import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-// import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { isEmail, isPhone } from '@/utils/validate'
-import { getTeacherPageList, updateTeacher, addTeacher, deleteTeacher } from '@/api/teacher-manage'
-
-/* const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-] */
-
-// arr to obj, such as { CN : "China", US : "USA" }
-/* const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {}) */
+import PopTransfer from '@/components/PopTransfer'
+import { getTeacherPageList, updateTeacher, addTeacher, deleteTeacher, getAssignedRole, saveAssignedRole } from '@/api/teacher-manage'
+import { getRolesList } from '@/api/role-manage'
 
 export default {
   name: 'TeacherManage',
-  components: { Pagination },
+  components: { Pagination, PopTransfer },
   directives: { waves },
-  filters: {
-    /* statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    } */
-  },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -240,50 +201,51 @@ export default {
         teaTitle: [{ required: true, message: '请输入职称', trigger: 'blur' }],
         teaPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
         teaEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
-      }
-      /* dialogPvVisible: false,
-      pvData: [],
-      downloadLoading: false */
+      },
+      // 穿梭框参数
+      visible: false,
+      rolesList: [],
+      chooseList: [],
+      selectTeacherId: ''
     }
   },
-  /* computed: {
-    page: {
-      get() {
-        return this.listQuery.currentPage
-      },
-      set(val) {
-        this.listQuery.currentPage = val
-      }
-    },
-    limit: {
-      get() {
-        return this.listQuery.pageSize
-      },
-      set(val) {
-        this.listQuery.pageSize = val
-      }
-    }
-  }, */
   created() {
     this.getList()
+    this.getRolesList()
   },
   methods: {
+    close() {
+      this.visible = false
+    },
     updatePage(val) {
       this.listQuery.currentPage = val
     },
     updateLimit(val) {
       this.listQuery.pageSize = val
     },
+    // 显示穿梭弹窗
+    async showPopTransfer(row) {
+      this.selectTeacherId = row.id
+      const response = await getAssignedRole({ id: row.id })
+      // this.chooseList = response.data
+      this.chooseList = response.data.map(item => item + '')
+      console.log(this.chooseList)
+      this.visible = true
+    },
     getList() {
       this.listLoading = true
-      console.log('listQuery', this.listQuery)
       getTeacherPageList(this.listQuery)
         .then(response => {
           const { content, total } = response.data
-          console.log('content', content)
           this.list = content
           this.total = total
           this.listLoading = false
+        })
+    },
+    getRolesList() {
+      getRolesList()
+        .then(response => {
+          this.rolesList = response.data
         })
     },
     setPagination(currentPage, pageSize) {
@@ -295,27 +257,21 @@ export default {
       this.listQuery.currentPage = 1
       this.getList()
     },
-    /* handleModifyStatus(row, status) {
+    async updateRoles() {
+      // 1. 获取数据
+      const ids = this.chooseList.join(',')
+      const data = {
+        roleIds: ids,
+        teaId: this.selectTeacherId
+      }
+      // 2. 发送请求
+      await saveAssignedRole(data)
       this.$message({
-        message: '操作Success',
-        type: 'success'
+        type: 'success',
+        message: '角色分配成功'
       })
-      row.status = status
+      this.visible = false
     },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },*/
     resetTemp() {
       this.temp = {
         'id': '',
@@ -337,7 +293,6 @@ export default {
       })
     },
     createData() {
-      console.log('添加数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // 1. 添加教师
@@ -362,10 +317,8 @@ export default {
       })
     },
     updateData() {
-      // console.log('更新数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log('校验成功')
           // 1. 发送请求
           updateTeacher(this.temp)
             .then(response => {

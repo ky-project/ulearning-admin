@@ -63,3 +63,11 @@ export function getAssignedPermission(data) {
     method: 'GET'
   })
 }
+
+// 查询所有角色数组
+export function getRolesList() {
+  return request({
+    url: '/system-manage/role/arrayList',
+    method: 'GET'
+  })
+}
