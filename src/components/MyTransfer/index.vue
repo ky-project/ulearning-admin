@@ -40,12 +40,16 @@ export default {
 </script>
 <style lang='scss' scoped>
 .my-transfer {
-  ::v-deep .el-transfer__buttons {
-    width: 60px;
-    margin-right: 25px;
-    .el-button {
-      padding: 5px;
-      margin-left: 0;
+  ::v-deep .el-transfer {
+      display: flex;
+      .el-transfer__buttons {
+      width: 60px;
+      margin-right: 25px;
+      align-self: center;
+      .el-button {
+        padding: 5px;
+        margin-left: 0;
+      }
     }
   }
 }

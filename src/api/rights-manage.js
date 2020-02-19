@@ -51,7 +51,7 @@ export const updateRights = data => {
 export const getRightsList = () => {
   return request({
     method: 'GET',
-    url: '/system-manage/eiimnoprss / arrayList'
+    url: '/system-manage/permission/arrayList'
   })
 }
 

@@ -1,14 +1,21 @@
 <template>
   <div>
-    <MyTransfer v-model="value" :data="data" />
+    <Button @click="open">打开弹窗</Button>
+    <PopTransfer
+      v-model="value"
+      :data="data"
+      :visible="visible"
+      :on-close="close"
+      :on-submit="submit"
+    />
   </div>
 </template>
 
 <script>
-import MyTransfer from '@/components/MyTransfer'
+import PopTransfer from '@/components/PopTransfer'
 export default {
   name: '',
-  components: { MyTransfer },
+  components: { PopTransfer },
   data() {
     return {
       data: [
@@ -25,7 +32,8 @@ export default {
           label: '备选项三'
         }
       ],
-      value: ['key1', 'key2']
+      value: ['key1', 'key2'],
+      visible: false
     }
   },
 
@@ -37,7 +45,17 @@ export default {
 
   mounted() {},
 
-  methods: {}
+  methods: {
+    open: function() {
+      this.visible = true
+    },
+    close: function() {
+      this.visible = false
+    },
+    submit: function() {
+      // 发送请求信息
+    }
+  }
 
 }
 

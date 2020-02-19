@@ -37,23 +37,14 @@ export function getRolePageList(data) {
   })
 }
 
-// 查询角色已分配权限
+/* // 查询角色已分配权限
 export function getAssignedPermission(data) {
   const params = qs.stringify(data)
   return request({
     url: `/system-manage/role/getAssignedPermission?${params}`,
     method: 'GET'
   })
-}
-
-// 获取角色权限集合
-export function getPermissionListByRoleId(data) {
-  const params = qs.stringify(data)
-  return request({
-    url: `/system-manage/role/getPermissionListByRoleId?${params}`,
-    method: 'GET'
-  })
-}
+} */
 
 // 角色分配权限
 export function saveAssignedPermission(data) {
@@ -61,5 +52,14 @@ export function saveAssignedPermission(data) {
     url: '/system-manage/role/saveAssignedPermission',
     method: 'POST',
     data: qs.stringify(data)
+  })
+}
+
+// 查询角色已分配权限
+export function getAssignedPermission(data) {
+  const params = qs.stringify(data)
+  return request({
+    url: `/system-manage/role/getAssignedPermission?${params}`,
+    method: 'GET'
   })
 }

@@ -54,6 +54,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
+          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="showPopTransfer(row)">
+            <svg-icon icon-class="jiaosexiugai" />
+          </el-button>
           <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="handleUpdate(row)">
             <i class="el-icon-edit" />
           </el-button>
@@ -81,27 +84,18 @@
         label-position="left"
         label-width="70px"
       >
-        <el-form-item label="角色名" prop="roleName">
+        <el-form-item label="角色名" label-width="80px" prop="roleName">
           <el-input v-model="temp.roleName" />
         </el-form-item>
-        <el-form-item label="角色资源" prop="roleSource">
+        <el-form-item label="角色资源" label-width="80px" prop="roleSource">
           <el-input v-model="temp.roleSource" />
         </el-form-item>
-        <el-form-item label="管理员" prop="isAdmin">
+        <el-form-item label="管理员" label-width="80px" prop="isAdmin">
           <el-select v-model="temp.isAdmin" class="filter-item">
             <el-option label="是" :value="true" />
             <el-option label="否" :value="false" />
           </el-select>
         </el-form-item>
-        <allocate
-          :current-list="assignedPrivilege"
-          :pool-list="restPrivilege"
-          value-name="permissionName"
-          current-title="已分配权限"
-          pool-title="权限池"
-          @addItem="addItem"
-          @deleteItem="deleteItem"
-        />
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -112,20 +106,38 @@
         </el-button>
       </div>
     </el-dialog>
+    <pop-transfer
+      v-model="chooseList"
+      pop-title="分配权限"
+      :list-titles="['权限池', '已选项']"
+      :data="rightsList"
+      :visible="visible"
+      :on-close="close"
+      :on-submit="updateRights"
+    />
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import Allocate from '@/components/Allocate'
-// import { isEmpty } from '@/utils'
+import PopTransfer from '@/components/PopTransfer'
 import { getPrivilegeGroupList, getAllPrivilegeGroup } from '@/api/privilege-manage'
-import { getRolePageList, updateRole, addRole, deleteRole, getAssignedPermission, saveAssignedPermission } from '@/api/role-manage'
+import {
+  getRolePageList,
+  updateRole,
+  addRole,
+  deleteRole,
+  saveAssignedPermission,
+  getAssignedPermission
+} from '@/api/role-manage'
+import {
+  getRightsList
+} from '@/api/rights-manage'
 
 export default {
   name: 'RoleManage',
-  components: { Pagination, Allocate },
+  components: { Pagination, PopTransfer },
   directives: { waves },
   data() {
     return {
@@ -159,18 +171,49 @@ export default {
       allPrivilege: [],
       assignedPrivilege: [],
       restPrivilege: [],
-      privilegeGroup: []
+      privilegeGroup: [],
+      // 穿梭框参数
+      visible: false,
+      rightsList: [],
+      chooseList: [],
+      selectRoleId: ''
     }
-  },
-  computed: {
-
   },
   created() {
     this.getList()
     this.getAllPrivilege()
     this.getAllPrivilegeGroup()
+    this.getRightsList()
   },
   methods: {
+    close() {
+      this.visible = false
+    },
+    // 更新角色权限
+    async updateRights() {
+      // 1. 获取数据
+      const ids = this.chooseList.join(',')
+      const data = {
+        permissionIds: ids,
+        roleId: this.selectRoleId
+      }
+      // 2. 发送请求
+      await saveAssignedPermission(data)
+      this.$message({
+        type: 'success',
+        message: '角色权限分配成功'
+      })
+      this.visible = false
+    },
+    // 显示穿梭弹窗
+    async showPopTransfer(row) {
+      this.selectRoleId = row.id
+      const response = await getAssignedPermission({ roleId: row.id })
+      this.chooseList = response.data.map(item => {
+        return item.key
+      })
+      this.visible = true
+    },
     deleteItem(index) {
       const tempItem = this.assignedPrivilege[index]
       this.assignedPrivilege.splice(index, 1)
@@ -190,37 +233,13 @@ export default {
       })
       return result
     },
-    /* // 获取剩余权限组
-    getRestPrivilege() {
-      this.privilegeGroup.forEach(groupName => {
-        let tempArr = []
-        const allItems = this.allPrivilege[groupName]
-        // 如果没有对应的权限组
-        if (!this.assignedPrivilege[groupName]) {
-          // 直接进行深拷贝
-          tempArr = JSON.parse(JSON.stringify(allItems))
-        } else {
-          // 否则
-          const assignedItems = this.assignedPrivilege[groupName]
-          for (let i = 0; i < allItems.length; i++) {
-            let flag = true
-            const allItem = allItems[i]
-            for (let j = 0; j < assignedItems.length; j++) {
-              const assignedItem = assignedItems[j]
-              if (allItem.id === assignedItem.id) {
-                flag = false // 存在flag = false
-                break
-              }
-            }
-            // 如果不存在，添加
-            if (flag) {
-              tempArr.push(allItem)
-            }
-          }
-        }
-        this.restPrivilege[groupName] = tempArr
-      })
-    }, */
+    // 获取所有权限列表
+    getRightsList() {
+      getRightsList()
+        .then(response => {
+          this.rightsList = response.data
+        })
+    },
     // 获取所有权限组
     getAllPrivilegeGroup() {
       getAllPrivilegeGroup()
@@ -232,7 +251,6 @@ export default {
     getAssignedPermission(id) {
       return getAssignedPermission({ roleId: id })
         .then(response => {
-          console.log('response', response)
           this.assignedPrivilege = this.formatPrivilege(response.data)
           return Promise.resolve('success')
         })
@@ -243,28 +261,7 @@ export default {
         .then(response => {
           const temp = this.formatPrivilege(response.data)
           this.allPrivilege = temp
-          // this.restPrivilege = temp
-          console.log('allPrivilege', this.allPrivilege)
         })
-    },
-    // 获取未分配的权限
-    getRestPrivilege() {
-      this.restPrivilege = []
-      for (let i = 0; i < this.allPrivilege.length; i++) {
-        let flag = true
-        const allItem = this.allPrivilege[i]
-        for (let j = 0; j < this.assignedPrivilege.length; j++) {
-          const assignedItem = this.assignedPrivilege[j]
-          if (allItem.id === assignedItem.id) {
-            flag = false
-            break
-          }
-        }
-        if (flag) {
-          this.restPrivilege.push(allItem)
-        }
-      }
-      console.log('restPrivilege', this.restPrivilege)
     },
     handleReset() {
       this.listQuery.roleName = ''
@@ -316,11 +313,7 @@ export default {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
           // 1. 添加角色
-          const response = await addRole(this.temp)
-          const id = response.data
-          // 2. 添加角色权限
-          const permissionIds = this.privilege2string(this.assignedPrivilege)
-          await saveAssignedPermission({ roleId: id, permissionIds })
+          await addRole(this.temp)
           this.$message({
             type: 'success',
             message: '角色添加成功'
@@ -329,28 +322,6 @@ export default {
           this.dialogFormVisible = false
         }
       })
-    },
-    async handleUpdate(row) {
-      // 1. 请求获取该角色已有的权限
-      const result = await this.getAssignedPermission(row.id)
-      console.log('assignedPrivilege', this.assignedPrivilege)
-      if (result === 'success') {
-        // 2. 计算剩余权限
-        this.getRestPrivilege()
-        console.log('restPrivilege', this.restPrivilege)
-        // 3. 设置要显示的角色信息
-        this.temp = Object.assign({}, row) // copy obj
-        this.dialogStatus = 'update'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      }
-    },
-    privilege2string(privilegeList) {
-      const arr = []
-      privilegeList.forEach(item => arr.push(item.id))
-      return arr.join(',')
     },
     async updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -380,7 +351,7 @@ export default {
           .then(response => {
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: '角色删除成功!'
             })
             this.getList()
           })
