@@ -17,3 +17,11 @@ export function getLogPageList(data) {
     method: 'GET'
   })
 }
+
+// 历史日志查询
+export function getLogHistoryList() {
+  return request({
+    url: `/monitor-manage/logHistory/getVoList`,
+    method: 'GET'
+  })
+}

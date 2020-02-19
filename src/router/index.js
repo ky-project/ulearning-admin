@@ -142,7 +142,7 @@ export const constantRoutes = [
         meta: { title: '监控系统', icon: 'jiankongmianban' }
       },
       {
-        path: 'http://???',
+        path: 'http://ky.darren1112.com:8082/xxl-job-admin/',
         meta: { title: '任务调度中心', icon: 'renwutiaodu' }
       },
       {

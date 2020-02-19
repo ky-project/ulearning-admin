@@ -30,6 +30,9 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
+      <el-button v-waves class="filter-item fr" type="primary" icon="el-icon-download" @click="handleDownload()">
+        历史日志下载
+      </el-button>
     </div>
 
     <el-table
@@ -44,14 +47,8 @@
       <el-table-column type="expand">
         <template slot-scope="{row}">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="执行模块">
-              <span>{{ row.logModule }}</span>
-            </el-form-item>
             <el-form-item label="异常详细">
               <span>{{ row.logException }}</span>
-            </el-form-item>
-            <el-form-item label="请求耗时">
-              <span>{{ row.logTime }}</span>
             </el-form-item>
             <el-form-item label="请求参数">
               <span>{{ row.logParams }}</span>
@@ -64,24 +61,36 @@
           <span>{{ row.logUsername }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作地址" min-width="120" align="center">
+      <el-table-column label="操作地址" min-width="20" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logAddress }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="50" align="center">
+      <el-table-column label="操作" min-width="30" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logDescription }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="日志类型" min-width="120" align="center">
+      <el-table-column label="访问接口" min-width="30" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.logModule }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="日志类型" min-width="10" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="100" align="center">
+      <el-table-column label="操作时间" min-width="30" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="耗时" min-width="10" align="center">
+        <template slot-scope="{row}">
+          <el-tag :type="row.logTime > 500 ? (row.logTime > 1000 ? 'warning' : 'danger' ): 'success'">
+            <span>{{ row.logTime }}</span>
+          </el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -94,13 +103,29 @@
       class="fr"
       @pagination="setPagination"
     />
+
+    <el-dialog title="历史日志"
+               :visible.sync="dialogFormVisible"
+               width="30%">
+        <el-radio-group v-model="logHistoryId">
+          <el-radio v-for="item in logHistoryList" :key="item.id" :label="item.id">{{item.logHistoryDate}}</el-radio>
+        </el-radio-group>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="downLoadLogFile()">
+          下载
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getLogTypeList, getLogPageList } from '@/api/log-monitor'
+import { getLogTypeList, getLogPageList, getLogHistoryList, downloadLogHistoryFile } from '@/api/log-monitor'
 
 export default {
   name: 'LogMonitor',
@@ -120,7 +145,9 @@ export default {
         logType: '',
         createTime: ''
       },
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      logHistoryList: [],
+      logHistoryId: ''
     }
   },
   created() {
@@ -164,6 +191,17 @@ export default {
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
+    },
+    // 下载历史文件弹窗
+    handleDownload() {
+      this.dialogFormVisible = true
+      getLogHistoryList()
+        .then(response => {
+          this.logHistoryList = response.data;
+        })
+    },
+    downLoadLogFile() {
+      window.location.href = process.env.VUE_APP_BASE_API + `/monitor-manage/logHistory/download?id=${this.logHistoryId}`
     }
   }
 }
