@@ -47,3 +47,11 @@ export const updateRights = data => {
   })
 }
 
+// 获取所有权限数组
+export const getRightsList = () => {
+  return request({
+    method: 'GET',
+    url: '/system-manage/eiimnoprss / arrayList'
+  })
+}
+
