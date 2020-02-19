@@ -227,9 +227,7 @@ export default {
     async showPopTransfer(row) {
       this.selectTeacherId = row.id
       const response = await getAssignedRole({ id: row.id })
-      // this.chooseList = response.data
       this.chooseList = response.data.map(item => item + '')
-      console.log(this.chooseList)
       this.visible = true
     },
     getList() {
