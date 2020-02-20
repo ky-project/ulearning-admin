@@ -25,3 +25,22 @@ export function getLogHistoryList() {
     method: 'GET'
   })
 }
+
+// 查询前n条日志
+export function getLogTop(data) {
+  const params = qs.stringify(data)
+  return request({
+    url: `/monitor-manage/log/getTop?${params}`,
+    method: 'GET'
+  })
+}
+
+// 查询近n天的访问量
+export function getDaysTraffic(data) {
+  const params = qs.stringify(data)
+  return request({
+    url: `/monitor-manage/log/getDaysTraffic?${params}`,
+    method: 'GET'
+  })
+}
+

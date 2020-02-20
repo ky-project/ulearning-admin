@@ -1,65 +1,61 @@
 <template>
-  <div>
-    <Button @click="open">打开弹窗</Button>
-    <PopTransfer
-      v-model="value"
-      :data="data"
-      :visible="visible"
-      :on-close="close"
-      :on-submit="submit"
-    />
-  </div>
+  <v-chart :options="option" />
 </template>
 
 <script>
-import PopTransfer from '@/components/PopTransfer'
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+
 export default {
-  name: '',
-  components: { PopTransfer },
+  components: {
+    'v-chart': ECharts
+  },
   data() {
     return {
-      data: [
-        {
-          key: 'key1',
-          label: '备选项一'
+      option: {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // x轴数据
+          name: '日期', // x轴名称
+          // x轴名称样式
+          nameTextStyle: {
+            fontWeight: 600,
+            fontSize: 18
+          }
         },
-        {
-          key: 'key2',
-          label: '备选项二'
+        yAxis: {
+          type: 'value',
+          name: '访问量', // y轴名称
+          nameTextStyle: {
+            fontWeight: 600,
+            fontSize: 18
+          }
         },
-        {
-          key: 'key3',
-          label: '备选项三'
-        }
-      ],
-      value: ['key1', 'key2'],
-      visible: false
-    }
-  },
-
-  computed: {},
-
-  watch: {},
-
-  beforeMount() {},
-
-  mounted() {},
-
-  methods: {
-    open: function() {
-      this.visible = true
-    },
-    close: function() {
-      this.visible = false
-    },
-    submit: function() {
-      // 发送请求信息
+        tooltip: {
+          trigger: 'axis' // axis   item   none三个值
+        },
+        series: [
+          {
+            name: '访问数',
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line'
+          }
+        ]
+      }
     }
   }
-
 }
-
 </script>
-<style lang='' scoped>
 
+<style>
+/**
+ * 默认尺寸为 600px×400px，如果想让图表响应尺寸变化，可以像下面这样
+ * 把尺寸设为百分比值（同时请记得为容器设置尺寸）。
+ */
+.echarts {
+  width: 100%;
+  height: 100%;
+}
 </style>

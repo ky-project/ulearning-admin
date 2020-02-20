@@ -31,6 +31,11 @@ module.exports = {
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
+  // for the echarts
+  transpileDependencies: [
+    'vue-echarts',
+    'resize-detector'
+  ],
   devServer: {
     port: port,
     open: true,
@@ -91,7 +96,7 @@ module.exports = {
     config
       // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === 'development', config =>
-        config.devtool('cheap-module-eval-source-map')
+        config.devtool('cheap-module-source-map')
       )
 
     config.when(process.env.NODE_ENV !== 'development', config => {
