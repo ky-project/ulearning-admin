@@ -1,3 +1,4 @@
+// 路由权限
 export const STUDENT = 'student:manage'
 export const TEACHER = 'teacher:manage'
 export const ROLE = 'role:manage'

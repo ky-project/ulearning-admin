@@ -14,6 +14,8 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import permission from '@/directive/permission'
+import permissionSource from '@/directive/permission/config'
 
 /**
  * If you don't want to use mock-server
@@ -35,9 +37,15 @@ Vue.use(ElementUI)
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
+Vue.prototype.$permission = permissionSource
+
 new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
+})
+
+Vue.directive('permission', {
+  permission
 })

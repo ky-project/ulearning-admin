@@ -1,17 +1,32 @@
 <template>
   <div class="app-container">
+    <!-- 查询 -->
     <div class="filter-container">
       <el-input v-model="listQuery.stuName" placeholder="姓名" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.stuNumber" placeholder="学号" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.stuDept" placeholder="系部" style="width: 200px;" class="filter-item" />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button
+        v-waves
+        v-permission="$permission.STUDENT_GET"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         查询
       </el-button>
-      <el-button class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button
+        v-permission="$permission.STUDENT_ADD"
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleCreate"
+      >
         添加
       </el-button>
     </div>
-
+    <!-- 表格 -->
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -53,16 +68,28 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="handleUpdate(row)">
+          <el-button
+            v-permission="$permission.STUDENT_UPDATE"
+            :style="{color: '#409EFF'}"
+            type="text"
+            size="mini"
+            @click="handleUpdate(row)"
+          >
             <i class="el-icon-edit" />
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" size="mini" type="text" @click="handleDelete(row,$index)">
+          <el-button
+            v-permission="$permission.STUDENT_DELETE"
+            :style="{color: '#F56C6C'}"
+            size="mini"
+            type="text"
+            @click="handleDelete(row,$index)"
+          >
             <i class="el-icon-delete" />
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    <!-- 分页器 -->
     <pagination
       v-show="total>0"
       :total="total"
@@ -71,7 +98,7 @@
       class="fr"
       @pagination="setPagination"
     />
-
+    <!-- 弹窗 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
@@ -111,16 +138,6 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <!-- <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -134,19 +151,6 @@ export default {
   name: 'StudentManage',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    /* statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    } */
-  },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -202,29 +206,8 @@ export default {
         stuPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
         stuEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
       }
-      /* dialogPvVisible: false,
-      pvData: [],
-      downloadLoading: false */
     }
   },
-  /* computed: {
-    page: {
-      get() {
-        return this.listQuery.currentPage
-      },
-      set(val) {
-        this.listQuery.currentPage = val
-      }
-    },
-    limit: {
-      get() {
-        return this.listQuery.pageSize
-      },
-      set(val) {
-        this.listQuery.pageSize = val
-      }
-    }
-  }, */
   created() {
     this.getList()
   },
@@ -247,35 +230,12 @@ export default {
         })
     },
     setPagination(currentPage, pageSize) {
-      // this.listQuery.currentPage = currentPage
-      // this.listQuery.pageSize = pageSize
       this.getList()
     },
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
     },
-    /* handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },*/
     resetTemp() {
       this.temp = {
         'id': '',
@@ -321,7 +281,6 @@ export default {
       })
     },
     updateData() {
-      // console.log('更新数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           console.log('校验成功')
@@ -355,39 +314,6 @@ export default {
           })
       })
     }
-    /* handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
-    getSortClass: function(key) {
-      const sort = this.listQuery.sort
-      return sort === `+${key}` ? 'ascending' : 'descending'
-    } */
   }
 }
 </script>

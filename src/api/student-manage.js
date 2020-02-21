@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import qs from 'qs'
-
+// getStudentPageList, updateStudent, addStudent, deleteStudent
 // 添加学生
 export function addStudent(data) {
   return request({
