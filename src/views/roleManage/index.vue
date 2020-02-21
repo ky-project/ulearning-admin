@@ -319,6 +319,7 @@ export default {
             message: '角色添加成功'
           })
           this.getList()
+          this.getAllPrivilegeGroup()
           this.dialogFormVisible = false
         }
       })
@@ -335,6 +336,7 @@ export default {
                 message: '角色信息更新成功'
               })
               this.getList()
+              this.getAllPrivilegeGroup()
               this.dialogFormVisible = false
             })
         }

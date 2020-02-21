@@ -7,7 +7,7 @@
 <script>
 
 export default {
-  name: '',
+  name: 'ResetPassword',
 
   components: {},
   props: [''],

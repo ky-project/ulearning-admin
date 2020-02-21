@@ -34,7 +34,8 @@ module.exports = {
   // for the echarts
   transpileDependencies: [
     'vue-echarts',
-    'resize-detector'
+    'resize-detector',
+    'vuex-persist'
   ],
   devServer: {
     port: port,

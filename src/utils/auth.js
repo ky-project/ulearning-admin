@@ -18,3 +18,7 @@ export function getRefreshToken() {
 export function removeRefreshToken() {
   return Cookies.remove(RefreshTokenKey)
 }
+
+export function removeVuex() {
+  return window.sessionStorage.removeItem('vuex')
+}

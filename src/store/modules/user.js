@@ -9,13 +9,12 @@ import {
   getRole
 } from '@/api/auth'
 import { removeRefreshToken, removeToken } from '@/utils/auth'
-// import { getToken, setToken, removeToken } from '@/utils/auth'
-// import { resetRouter } from '@/router'
+import { removeVuex } from '@/utils/auth'
 
 const getDefaultState = () => {
   return {
     userInfo: '',
-    permisssion: '',
+    permission: '',
     role: ''
   }
 }
@@ -51,25 +50,14 @@ const actions = {
         })
     })
   },
-  // user login
-  login({ commit }, userInfo) {
-    return new Promise((resolve, reject) => {
-      login(userInfo)
-        .then(response => {
-          resolve()
-        })
-        .catch(error => {
-          reject(error)
-        })
-    })
-  },
   getPermission({ commit }) {
     return new Promise((resolve, reject) => {
       getPermission()
         .then(response => {
           const { data } = response
+          // console.log('permission', data)
           commit('SET_PERMISSION', data)
-          resolve()
+          resolve(data)
         })
         .catch(error => {
           reject(error)
@@ -82,6 +70,19 @@ const actions = {
         .then(response => {
           const { data } = response
           commit('SET_USER_INFO', data)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  },
+  // user login
+  login({ commit, dispatch }, userInfo) {
+    return new Promise((resolve, reject) => {
+      login(userInfo)
+        .then(response => {
+          // 登录成功,获取权限，角色，用户信息
           resolve()
         })
         .catch(error => {
@@ -89,15 +90,17 @@ const actions = {
         })
     })
   },
+
   setInfo({ commit, dispatch }, data) {
     return new Promise((resolve, reject) => {
       // 更新用户信息
       updateInfo(data)
         .then(response => {
-          console.log('update', response)
           // 成功，重新获取用户信息
           dispatch('getInfo')
-          resolve()
+            .then(() => {
+              resolve()
+            })
         })
         .catch(error => {
           reject(error)
@@ -110,6 +113,7 @@ const actions = {
       logout()
         .then(() => {
           commit('RESET_STATE')
+          removeVuex() // 删除sessionStorage
           resolve()
         })
         .catch(error => {

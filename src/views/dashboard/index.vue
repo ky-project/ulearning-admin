@@ -94,7 +94,10 @@ export default {
       return greet
     },
     lastLoginTime() {
-      return this.userInfo.lastLoginTime.split(' ')[0]
+      if (this.userInfo) {
+        return this.userInfo.lastLoginTime.split(' ')[0]
+      }
+      return ''
     }
   },
   watch: {},

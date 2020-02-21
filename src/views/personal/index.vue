@@ -36,7 +36,7 @@ import UserCard from './components/UserCard'
 import { updatePwd } from '@/api/auth'
 import { mapActions } from 'vuex'
 export default {
-  name: '',
+  name: 'Personal',
 
   components: {
     UserCard

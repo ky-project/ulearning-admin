@@ -4,6 +4,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken, getRefreshToken } from '@/utils/auth' // get token from cookie
+import { resetRouter } from '@/router'
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -14,31 +15,47 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   document.title = getPageTitle(to.meta.title)
   const hasToken = getToken() && getRefreshToken()
-  // debugger
   if (hasToken) {
+    // 登录成功
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done()
     } else {
-      // 从vuex中获取用户信息和权限
-      const hasUserInfo = store.getters.userInfo
-      const hasPermission = store.getters.permission
-      const hasRole = store.getters.role
-      if (hasUserInfo && hasPermission && hasRole) {
-        // 成功
-        // 动态添加路由
+      // 获取用户信息(权限)
+      const permission = store.getters.permission
+      const hasPermission = permission && permission.length > 0
+      if (hasPermission) {
+        // 有权限
         next()
       } else {
+        // 没有权限
         try {
-          // 失败，尝试重新获取用户信息和权限
-          await Promise.all([
+          // 获取用户信息
+          const results = await Promise.all([
             store.dispatch('user/getInfo'),
             store.dispatch('user/getPermission'),
             store.dispatch('user/getRole')
           ])
-          next()
+          // 格式化处理
+          const rawPermissions = results[1]
+          const permissions = []
+          rawPermissions.forEach(permission => {
+            const permissionSource = permission.permissionSource
+            if (permissionSource.split(':')[1] === 'manage') {
+              permissions.push(permissionSource)
+            }
+          })
+          console.log('拥有的路由权限', permissions)
+          store.dispatch('permission/generateRoutes', permissions)
+            .then((accessRoutes) => {
+              // 解决再次登录路由重复添加的问题
+              resetRouter()
+              // 成功，说明是刚登陆
+              router.addRoutes(accessRoutes)
+              next({ ...to, replace: true })
+            })
         } catch (error) {
-          // remove token and go to login page to re-login
+          // 失败，说明是假token
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
@@ -47,14 +64,12 @@ router.beforeEach(async(to, from, next) => {
       }
     }
   } else {
-    /* has no token*/
-
+    // 没有token，判断是否是白名单路由
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
       next()
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
+      // 不是，跳转到登录页
+      next('/login')
       NProgress.done()
     }
   }

@@ -1,50 +1,126 @@
 <template>
-  <v-chart :options="option" />
+  <div>{{ data }}</div>
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/title'
-
 export default {
-  components: {
-    'v-chart': ECharts
-  },
+  name: 'Test',
   data() {
     return {
-      option: {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // x轴数据
-          name: '日期', // x轴名称
-          // x轴名称样式
-          nameTextStyle: {
-            fontWeight: 600,
-            fontSize: 18
-          }
+      data: [
+        {
+          name: 1,
+          children: [
+            {
+              name: 4,
+              auth: 'a'
+            },
+            {
+              name: 5,
+              children: [
+                {
+                  name: 10,
+                  auth: 'b'
+                }
+              ]
+            }
+          ]
         },
-        yAxis: {
-          type: 'value',
-          name: '访问量', // y轴名称
-          nameTextStyle: {
-            fontWeight: 600,
-            fontSize: 18
-          }
+        {
+          name: 2,
+          children: [
+            {
+              name: 6,
+              auth: 'c'
+            }
+          ]
         },
-        tooltip: {
-          trigger: 'axis' // axis   item   none三个值
-        },
-        series: [
-          {
-            name: '访问数',
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line'
+        {
+          name: 3,
+          children: [
+            {
+              name: 7,
+              auth: 'd'
+            },
+            {
+              name: 8,
+              children: [
+                {
+                  name: 11,
+                  auth: 'e'
+                }
+              ]
+            },
+            {
+              name: 9,
+              auth: 'f'
+            }
+          ]
+        }
+      ],
+      permissions: ['a', 'b', 'd', 'e'],
+      accessPermissions: {}
+    }
+  },
+  created() {
+    /* if (!isEmpty(this.data)) {
+      const stack = [...this.data]
+      this.getRoutes(stack, this.permissions)
+    } */
+    if (this.data) {
+      const root = {
+        name: 0,
+        children: [...this.data]
+      }
+      // debugger
+      const result = this.getRoutes(root)
+      console.log(result)
+    }
+  },
+  methods: {
+    copyExpectChildren(obj) {
+      const temp = { ...obj }
+      delete temp.children
+      temp.children = []
+      return temp
+    },
+    // 递归遍历
+    getRoutes(node) {
+      if (node.children) {
+        const tempNode = this.copyExpectChildren(node)
+        node.children.forEach(childNode => {
+          const obj = this.getRoutes(childNode)
+          if (obj.result) {
+            tempNode.children.push(obj.node)
           }
-        ]
+        })
+        return {
+          result: tempNode.children.length > 0,
+          node: tempNode
+        }
+      } else {
+        // 叶节点
+        const result = this.permissions.includes(node.auth)
+        return {
+          result,
+          node
+        }
       }
     }
+    /* getRoutes(stack, permissions) {
+      while (!isEmpty(stack)) {
+        const temp = stack.pop()
+        if (temp.children) {
+          temp.children.forEach(item => {
+            stack.push(item)
+          })
+        } else {
+          // 子节点
+          const result = permissions.includes(temp.auth)
+          console.log(`子节点${temp.name}：${result}`)
+        }
+      }
+    } */
   }
 }
 </script>

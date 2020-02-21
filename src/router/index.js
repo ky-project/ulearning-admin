@@ -1,10 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
-/* Layout */
 import Layout from '@/layout'
+import {
+  TEACHER,
+  STUDENT,
+  ROLE,
+  PERMISSION,
+  COURSE,
+  TEACHING_TASK,
+  LOG,
+  MONITOR,
+  TASK_SCHEDULING,
+  FILE,
+  DOCUMENT
+} from './config'
+Vue.use(Router)
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -69,8 +79,8 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
-  },
-  {
+  }
+  /* {
     path: '/system-manage',
     name: 'SystemManage',
     component: Layout,
@@ -160,14 +170,135 @@ export const constantRoutes = [
         meta: { title: '开发文档', icon: 'wendang' }
       }
     ]
-  },
-  {
+  }, */
+  /* {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true } */
+]
+
+export const asyncRoutes = [
+  {
+    path: '/system-manage',
+    name: 'SystemManage',
+    component: Layout,
+    meta: { title: '系统管理', icon: 'xitongguanli' },
+    redirect: 'noRedirect',
+    children: [
+      {
+        path: 'student-manage',
+        name: 'StudentManage',
+        component: () => import('@/views/studentManage/index'),
+        meta: { title: '学生管理', icon: 'yonghu', permission: STUDENT }
+      },
+      {
+        path: 'teacher-manage',
+        name: 'TeacherManage',
+        component: () => import('@/views/teacherManage/index'),
+        meta: { title: '教师管理', icon: 'jiaoshi', permission: TEACHER }
+      },
+      {
+        path: 'role-manage',
+        name: 'RoleManage',
+        component: () => import('@/views/roleManage/index'),
+        meta: { title: '角色管理', icon: 'role', permission: ROLE }
+      },
+      {
+        path: 'rights-manage',
+        name: 'RightsManage',
+        component: () => import('@/views/rightsManage/index'),
+        meta: {
+          title: '权限管理',
+          icon: 'quanxian',
+          permission: PERMISSION
+        }
+      }
+    ]
+  },
+  {
+    path: '/function-module',
+    name: 'FunctionModule',
+    component: Layout,
+    meta: { title: '功能模块', icon: 'gongneng' },
+    redirect: 'noRedirect',
+    children: [
+      {
+        path: 'course-manage',
+        name: 'CourseManage',
+        component: () => import('@/views/courseManage/index'),
+        meta: {
+          title: '课程管理',
+          icon: 'kechengbiao',
+          permission: COURSE
+        }
+      },
+      {
+        path: 'teaching-task-manage',
+        name: 'TeachingTaskManage',
+        component: () => import('@/views/teachingTaskManage/index'),
+        meta: {
+          title: '教学任务管理',
+          icon: 'renwu',
+          permission: TEACHING_TASK
+        }
+      }
+    ]
+  },
+  {
+    path: '/monitor-manage',
+    name: 'MonitorManage',
+    component: Layout,
+    meta: { title: '监控管理', icon: 'jiankong' },
+    redirect: 'noRedirect',
+    children: [
+      {
+        path: 'log-monitor',
+        name: 'LogMonitor',
+        component: () => import('@/views/logMonitor/index'),
+        meta: { title: '日志管理', icon: 'rizhi', permission: LOG }
+      },
+      {
+        path: 'http://ky.darren1112.com:8082/monitor-manage/',
+        meta: {
+          title: '监控系统',
+          icon: 'jiankongmianban',
+          permission: MONITOR
+        }
+      },
+      {
+        path: 'http://ky.darren1112.com:8082/xxl-job-admin/',
+        meta: {
+          title: '任务调度中心',
+          icon: 'renwutiaodu',
+          permission: TASK_SCHEDULING
+        }
+      },
+      {
+        path: 'http://????',
+        meta: {
+          title: '文件管理',
+          icon: 'wenjianguanli',
+          permission: FILE
+        }
+      }
+    ]
+  },
+  {
+    path: 'development-manage-link',
+    component: Layout,
+    children: [
+      {
+        path: 'http://ky.darren1112.com:8082/doc.html',
+        meta: {
+          title: '开发文档',
+          icon: 'wendang',
+          permission: DOCUMENT
+        }
+      }
+    ]
+  }
 ]
 
 const createRouter = () => new Router({
