@@ -260,7 +260,9 @@ export const asyncRoutes = [
         meta: { title: '日志管理', icon: 'rizhi', permission: LOG }
       },
       {
-        path: 'http://ky.darren1112.com:8082/monitor-manage/',
+        path: 'server-monitor',
+        name: 'ServerMonitor',
+        component: () => import('@/views/serverMonitor/index'),
         meta: {
           title: '监控系统',
           icon: 'jiankongmianban',
@@ -268,7 +270,9 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'http://ky.darren1112.com:8082/xxl-job-admin/',
+        path: 'task-scheduling',
+        name: 'TaskScheduling',
+        component: () => import('@/views/taskScheduling/index'),
         meta: {
           title: '任务调度中心',
           icon: 'renwutiaodu',
@@ -286,11 +290,14 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: 'development-manage-link',
+    path: '/development-manage-link',
     component: Layout,
+    redirect: 'noRedirect',
     children: [
       {
-        path: 'http://ky.darren1112.com:8082/doc.html',
+        path: 'document',
+        name: 'Document',
+        component: () => import('@/views/document/index'),
         meta: {
           title: '开发文档',
           icon: 'wendang',
