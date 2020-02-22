@@ -14,8 +14,31 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-import permission from '@/directive/permission'
+/*
+目前只有页面级别的权限控制
+如果你想开启按钮级别的权限控制，使用下面的代码
+*/
+/*
+import permission from '@/directive/permission/index.js'
 import permissionSource from '@/directive/permission/config'
+Vue.prototype.$permission = permissionSource
+Vue.directive('permission', {
+  inserted(el, binding, vnode) {
+    const { value } = binding
+    const permissions = store.getters && store.getters.permission
+    const permissionSources = permissions.map(item => item.permissionSource)
+    if (value && value instanceof Array && value.length > 0) {
+      const needPermissionSources = value
+      const hasPermission = needPermissionSources.every(item => permissionSources.includes(item))
+      if (!hasPermission) {
+        el.parentNode && el.parentNode.removeChild(el)
+      }
+    } else {
+      throw new Error(`need permissions! Like v-permission="[STUDENT_ADD]"`)
+    }
+  }
+})
+*/
 
 /**
  * If you don't want to use mock-server
@@ -37,8 +60,6 @@ Vue.use(ElementUI)
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
-Vue.prototype.$permission = permissionSource
-
 new Vue({
   el: '#app',
   router,
@@ -46,6 +67,3 @@ new Vue({
   render: h => h(App)
 })
 
-Vue.directive('permission', {
-  permission
-})

@@ -25,6 +25,15 @@ router.beforeEach(async(to, from, next) => {
       const permission = store.getters.permission
       const hasPermission = permission && permission.length > 0
       if (hasPermission) {
+        // TODO: 解决刷新，动态路由失效问题
+        /* if (store.getters.isFresh === true) {
+          console.log('')
+          console.log('重新添加路由')
+          console.log(store.getters.permission_addRoutes)
+          router.addRoutes(store.getters.permission_addRoutes)
+          store.dispatch('app/setFresh', false)
+          next({ ...to, replace: true })
+        } */
         // 有权限
         next()
       } else {
@@ -45,12 +54,13 @@ router.beforeEach(async(to, from, next) => {
               permissions.push(permissionSource)
             }
           })
-          console.log('拥有的路由权限', permissions)
+          // 生成路由
           store.dispatch('permission/generateRoutes', permissions)
             .then((accessRoutes) => {
               // 解决再次登录路由重复添加的问题
               resetRouter()
               // 成功，说明是刚登陆
+              console.log(accessRoutes)
               router.addRoutes(accessRoutes)
               next({ ...to, replace: true })
             })

@@ -39,6 +39,7 @@ import Hamburger from '@/components/Hamburger'
 import SvgIcon from '@/components/SvgIcon'
 import defaultAvatar from '@/assets/images/user.gif'
 export default {
+  name: 'Navbar',
   components: {
     Breadcrumb,
     Hamburger,

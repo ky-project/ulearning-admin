@@ -5,12 +5,11 @@ export default {
     const { value } = binding
     const permissions = store.getters && store.getters.permission
     const permissionSources = permissions.map(item => item.permissionSource)
-    console.log('permissionSources', permissionSources)
     if (value && value instanceof Array && value.length > 0) {
       const needPermissionSources = value
-      const hasPermission = needPermissionSources.every(item => {
-        permissionSources.include(item)
-      })
+      const hasPermission = needPermissionSources.every(item =>
+        permissionSources.includes(item)
+      )
       if (!hasPermission) {
         el.parentNode && el.parentNode.removeChild(el)
       }

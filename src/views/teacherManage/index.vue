@@ -4,10 +4,22 @@
       <el-input v-model="listQuery.teaName" placeholder="姓名" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.teaNumber" placeholder="工号" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.teaDept" placeholder="系部" style="width: 200px;" class="filter-item" />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         查询
       </el-button>
-      <el-button class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleCreate"
+      >
         添加
       </el-button>
     </div>
@@ -58,13 +70,28 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="80" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="showPopTransfer(row)">
+          <el-button
+            :style="{color: '#409EFF'}"
+            type="text"
+            size="mini"
+            @click="showPopTransfer(row)"
+          >
             <svg-icon icon-class="jiaosexiugai" />
           </el-button>
-          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="handleUpdate(row)">
+          <el-button
+            :style="{color: '#409EFF'}"
+            type="text"
+            size="mini"
+            @click="handleUpdate(row)"
+          >
             <i class="el-icon-edit" />
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" size="mini" type="text" @click="handleDelete(row,$index)">
+          <el-button
+            :style="{color: '#F56C6C'}"
+            size="mini"
+            type="text"
+            @click="handleDelete(row,$index)"
+          >
             <i class="el-icon-delete" />
           </el-button>
         </template>

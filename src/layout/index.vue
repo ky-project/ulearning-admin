@@ -15,7 +15,6 @@
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
-
 export default {
   name: 'Layout',
   components: {
@@ -30,15 +29,6 @@ export default {
       device: state => state.app.device,
       fixedHeader: state => state.settings.fixedHeader
     }),
-    /* sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    }, */
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -52,6 +42,7 @@ export default {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
+
   }
 }
 </script>

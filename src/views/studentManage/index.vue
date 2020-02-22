@@ -7,7 +7,6 @@
       <el-input v-model="listQuery.stuDept" placeholder="系部" style="width: 200px;" class="filter-item" />
       <el-button
         v-waves
-        v-permission="$permission.STUDENT_GET"
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -16,7 +15,6 @@
         查询
       </el-button>
       <el-button
-        v-permission="$permission.STUDENT_ADD"
         class="filter-item fr"
         style="margin-left: 10px;"
         type="primary"
@@ -69,7 +67,6 @@
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
-            v-permission="$permission.STUDENT_UPDATE"
             :style="{color: '#409EFF'}"
             type="text"
             size="mini"
@@ -78,7 +75,6 @@
             <i class="el-icon-edit" />
           </el-button>
           <el-button
-            v-permission="$permission.STUDENT_DELETE"
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"

@@ -5,14 +5,18 @@ export const STUDENT_DELETE = ['student:delete']
 export const STUDENT_UPDATE = ['student:update']
 export const STUDENT_GET = ['student:pageList']
 // 教师管理页面
-export const TEACHER_ADD = []
-export const TEACHER_DELETE = []
-export const TEACHER_UPDATE = []
-export const TEACHER_GET = []
-export const ALLOCATE_ROLE = []
+export const TEACHER_ADD = ['teacher:save']
+export const TEACHER_DELETE = ['teacher:delete']
+export const TEACHER_UPDATE = ['teacher: update;']
+export const TEACHER_GET = ['getTeacherPageList']
+export const ALLOCATE_ROLE = [
+  'teacher:getAssignedRole',
+  'teacher:saveAssignedRole',
+  'role:arrayList'
+]
 // 角色管理页面
-export const ROLE_ADD = []
-export const ROLE_DELETE = []
+export const ROLE_ADD = ['role:save']
+export const ROLE_DELETE = ['role:delete']
 export const ROLE_UPDATE = []
 export const ROLE_GET = []
 export const ALLOCATE_PERMISSION = []

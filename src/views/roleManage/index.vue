@@ -237,8 +237,13 @@ export default {
     getRightsList() {
       getRightsList()
         .then(response => {
-          this.rightsList = response.data
+          this.rightsList = this.filterRouteRights(response.data)
         })
+    },
+    // 筛选页面权限
+    filterRouteRights(rightList) {
+      console.log('rightList', rightList)
+      return rightList.filter(right => right.permissionSource.split(':')[1] === 'manage')
     },
     // 获取所有权限组
     getAllPrivilegeGroup() {
@@ -262,6 +267,14 @@ export default {
           const temp = this.formatPrivilege(response.data)
           this.allPrivilege = temp
         })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     handleReset() {
       this.listQuery.roleName = ''
@@ -327,16 +340,14 @@ export default {
     async updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          // 1. 发送修改角色请求
-          const permissionIds = this.privilege2string(this.assignedPrivilege)
-          Promise.all([updateRole(this.temp), saveAssignedPermission({ roleId: this.temp.id, permissionIds })])
+          // 1. 发送请求
+          updateRole(this.temp)
             .then(response => {
               this.$message({
                 type: 'success',
                 message: '角色信息更新成功'
               })
               this.getList()
-              this.getAllPrivilegeGroup()
               this.dialogFormVisible = false
             })
         }
