@@ -237,14 +237,15 @@ export default {
     getRightsList() {
       getRightsList()
         .then(response => {
-          this.rightsList = this.filterRouteRights(response.data)
+          this.rightsList = response.data
+          // this.rightsList = this.filterRouteRights(response.data)
         })
     },
     // 筛选页面权限
-    filterRouteRights(rightList) {
+    /*  filterRouteRights(rightList) {
       console.log('rightList', rightList)
       return rightList.filter(right => right.permissionSource.split(':')[1] === 'manage')
-    },
+    }, */
     // 获取所有权限组
     getAllPrivilegeGroup() {
       getAllPrivilegeGroup()
