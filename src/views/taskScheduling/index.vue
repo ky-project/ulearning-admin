@@ -12,7 +12,7 @@ export default {
   components: { iFrame },
   data() {
     return {
-      task_scheduling: process.env.VUE_APP_BASE_URL + '/xxl-job-admin/'
+      task_scheduling: process.env.VUE_APP_BASE_API + '/xxl-job-admin/'
     }
   },
   methods: {

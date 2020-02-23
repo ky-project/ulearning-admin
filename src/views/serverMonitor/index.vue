@@ -12,7 +12,7 @@ export default {
   components: { iFrame },
   data() {
     return {
-      server_monitor: process.env.VUE_APP_BASE_URL + '/monitor-manage/'
+      server_monitor: process.env.VUE_APP_BASE_API + '/monitor-manage/'
     }
   },
   methods: {
