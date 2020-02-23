@@ -78,7 +78,7 @@ const actions = {
     })
   },
   // user login
-  login({ commit, dispatch }, userInfo) {
+  login({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo)
         .then(response => {
