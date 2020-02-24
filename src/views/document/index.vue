@@ -12,7 +12,7 @@ export default {
   components: { iFrame },
   data() {
     return {
-      document: process.env.VUE_APP_BASE_URL + '/doc.html'
+      document: process.env.VUE_APP_BASE_API + '/doc.html'
     }
   },
   methods: {
