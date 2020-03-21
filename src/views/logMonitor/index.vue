@@ -1,12 +1,13 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.logUsername" placeholder="用户账号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.logUsername" size="small" placeholder="用户账号" style="width: 200px;" class="filter-item" />
       <el-select
         v-model="listQuery.logType"
         placeholder="日志类型"
         style="width: 200px;"
         class="filter-item"
+        size="small"
       >
         <el-option
           v-for="item in logTypeList"
@@ -23,14 +24,15 @@
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
         style="width: 200px;"
+        size="small"
       />
-      <el-button v-waves class="filter-item" type="primary" @click="handleReset">
+      <el-button v-waves class="filter-item" size="small" type="primary" round @click="handleReset">
         重置
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-item" size="small" type="primary" round icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button v-waves class="filter-item fr" type="primary" icon="el-icon-download" @click="handleDownload()">
+      <el-button v-waves class="filter-item fr" size="small" type="primary" round icon="el-icon-download" @click="handleDownload()">
         历史日志下载
       </el-button>
     </div>
@@ -43,6 +45,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      size="small"
     >
       <el-table-column type="expand">
         <template slot-scope="{row}">
@@ -56,39 +59,39 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="用户账号" align="center" width="120">
+      <el-table-column label="用户账号" align="center" width="100">
         <template slot-scope="{row}">
           <span>{{ row.logUsername }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作地址" min-width="20" align="center">
+      <el-table-column label="操作地址" min-width="30" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.logAddress }}</span>
+          <span>{{ row.logAddress }}({{ row.logIp }})</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="30" align="center">
+      <el-table-column label="操作" min-width="20" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logDescription }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="访问接口" min-width="30" align="center">
+      <el-table-column label="访问接口" min-width="20" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logModule }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="日志类型" min-width="10" align="center">
+      <el-table-column label="日志类型" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作时间" min-width="30" align="center">
+      <el-table-column label="操作时间" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="耗时" min-width="10" align="center">
+      <el-table-column label="耗时" width="70" align="center">
         <template slot-scope="{row}">
-          <el-tag :type="row.logTime > 500 ? (row.logTime > 1000 ? 'warning' : 'danger' ): 'success'">
+          <el-tag :type="row.logTime > 500 ? (row.logTime > 1000 ? 'danger' : 'warning' ): 'success'">
             <span>{{ row.logTime }}</span>
           </el-tag>
         </template>
@@ -140,7 +143,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         logUsername: '',
         logType: '',
         createTime: ''
