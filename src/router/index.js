@@ -12,7 +12,8 @@ import {
   MONITOR,
   TASK_SCHEDULING,
   FILE,
-  DOCUMENT
+  DOCUMENT,
+  API
 } from './config'
 Vue.use(Router)
 
@@ -74,7 +75,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'dashboard',
-        name: '主页',
+        name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
         meta: { title: '主页', icon: 'dashboard' }
       }
@@ -258,6 +259,12 @@ export const asyncRoutes = [
         name: 'LogMonitor',
         component: () => import('@/views/logMonitor/index'),
         meta: { title: '日志管理', icon: 'rizhi', permission: LOG }
+      },
+      {
+        path: 'api-monitor',
+        name: 'ApiMonitor',
+        component: () => import('@/views/apiMonitor/index'),
+        meta: { title: '接口监控', icon: 'fenpei', permission: API }
       },
       {
         path: 'server-monitor',

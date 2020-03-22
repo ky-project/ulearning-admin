@@ -10,4 +10,5 @@ export const MONITOR = 'monitor:manage'
 export const TASK_SCHEDULING = 'task-scheduling:manage'
 export const FILE = 'file:manage'
 export const DOCUMENT = 'document:manage'
+export const API = 'api:manage'
 
