@@ -84,7 +84,7 @@
           <span>{{ row.logType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作时间" width="80" align="center">
+      <el-table-column label="操作时间" width="90" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
@@ -101,6 +101,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"

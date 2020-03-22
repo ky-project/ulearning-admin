@@ -51,6 +51,7 @@
           name="code"
           type="text"
           tabindex="3"
+          @change="handleLogin"
         />
         <span class="seperator">|</span>
         <img :src="code.img" alt="" @click="getcode">

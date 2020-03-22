@@ -1,11 +1,13 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.teaName" placeholder="姓名" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.teaNumber" placeholder="工号" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.teaDept" placeholder="系部" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.teaName" size="small" placeholder="姓名" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.teaNumber" size="small" placeholder="工号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.teaDept" size="small" placeholder="系部" style="width: 200px;" class="filter-item" />
       <el-button
         v-waves
+        round
+        size="small"
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -14,6 +16,8 @@
         查询
       </el-button>
       <el-button
+        round
+        size="small"
         class="filter-item fr"
         style="margin-left: 10px;"
         type="primary"
@@ -30,9 +34,16 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column label="工号" prop="teaNumber" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.teaNumber }}</span>
@@ -101,6 +112,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -199,7 +211,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         teaName: '',
         teaNumber: '',
         teaDept: ''

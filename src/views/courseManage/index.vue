@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.courseName" placeholder="课程号" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.courseNumber" placeholder="课程名" style="width: 200px;" class="filter-item" />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-input v-model="listQuery.courseName" size="small" placeholder="课程号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.courseNumber" size="small" placeholder="课程名" style="width: 200px;" class="filter-item" />
+      <el-button v-waves class="filter-item" size="small" round type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button class="filter-item fr" size="small" round style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -19,7 +19,14 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      size="small"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column label="课程号" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.courseNumber }}</span>
@@ -55,6 +62,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -134,7 +142,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         courseName: '',
         courseNumber: ''
       },

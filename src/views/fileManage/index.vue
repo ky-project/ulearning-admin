@@ -40,17 +40,17 @@
           <span>{{ row.recordTable }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属表id" width="70" align="center">
+      <el-table-column label="所属表id" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.recordTableId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="文件大小" width="70" align="center">
+      <el-table-column label="文件大小" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ Math.round(((row.recordSize * 1.0) / 1024 / 1024) * 100) / 100 }} MB</span>
         </template>
       </el-table-column>
-      <el-table-column label="文件类型" width="70" align="center">
+      <el-table-column label="文件类型" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.recordType }}</span>
         </template>
