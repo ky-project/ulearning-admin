@@ -22,6 +22,17 @@
         class="filter-item fr"
         style="margin-left: 10px;"
         type="primary"
+        icon="el-icon-download"
+        @click="handleDownloadTemplate"
+      >
+        下载模板
+      </el-button>
+      <el-button
+        size="small"
+        round
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        type="primary"
         icon="el-icon-plus"
         @click="handleCreate"
       >
@@ -321,7 +332,15 @@ export default {
             this.getList()
           })
       })
-    }
+    },
+    handleDownloadTemplate(){
+      let a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = process.env.VUE_APP_BASE_API + '/system-manage/student/downloadTemplate'
+      document.body.appendChild(a)
+      a.click() // 触发点击
+      document.body.removeChild(a) // 然后移除
+    },
   }
 }
 </script>
