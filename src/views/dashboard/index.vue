@@ -18,7 +18,7 @@
             <svg-icon icon-class="tongji" class-name="icon"/>
             <div class="content">
               <p>今日访问</p>
-              <p><span>{{ visitor[6] }}</span>人</p>
+              <p><span>{{ visitor[this.daysTraffic - 1] }}</span>人</p>
             </div>
           </el-card>
         </el-col>
@@ -83,7 +83,8 @@ export default {
       visitor: [],
       date: [],
       chart: null,
-      list: []
+      list: [],
+      daysTraffic: 10
     }
   },
 
@@ -118,7 +119,7 @@ export default {
     const fileResponse = await getSumFileSize()
     this.fileSize = parseFloat(fileResponse.data)
     // 2. 获取近7天访问量
-    const visitResponse = await getDaysTraffic({days: 10})
+    const visitResponse = await getDaysTraffic({days: this.daysTraffic})
     const visitData = visitResponse.data
     this.visitor = visitData.map(item => parseInt(item.number))
     this.date = visitData.map(item => {
