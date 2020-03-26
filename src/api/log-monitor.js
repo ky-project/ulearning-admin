@@ -44,3 +44,12 @@ export function getDaysTraffic(data) {
   })
 }
 
+// 查询近n天的访问量
+export function getDaysOperation(data) {
+  const params = qs.stringify(data)
+  return request({
+    url: `/monitor-manage/log/getDaysOperation?${params}`,
+    method: 'GET'
+  })
+}
+

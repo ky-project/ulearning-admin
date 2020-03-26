@@ -18,7 +18,7 @@
             <svg-icon icon-class="tongji" class-name="icon"/>
             <div class="content">
               <p>今日访问</p>
-              <p><span>{{ visitor[this.daysTraffic - 1] }}</span>人</p>
+              <p><span>{{ visitor }}</span>人</p>
             </div>
           </el-card>
         </el-col>
@@ -36,7 +36,7 @@
         <el-col :xs="24" :sm="16">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="yonghu1" class-name="icon"/>访问量</span>
+              <span><svg-icon icon-class="yonghu1" class-name="icon"/>访问记录</span>
             </div>
             <div id="visit-count-chart" style="width: 100%;height: 400px"/>
           </el-card>
@@ -71,7 +71,7 @@ import echarts from 'echarts'
 import resize from '@/components/Charts/mixins/resize'
 import OperateTable from './components/OperateTable'
 import {getSumFileSize} from '@/api/file-manage'
-import {getDaysTraffic, getLogTop} from '@/api/log-monitor'
+import {getDaysTraffic, getLogTop, getDaysOperation} from '@/api/log-monitor'
 
 export default {
   name: 'Dashboard',
@@ -80,11 +80,13 @@ export default {
   data() {
     return {
       fileSize: 0,
-      visitor: [],
+      visitor: '',
       date: [],
       chart: null,
       list: [],
-      daysTraffic: 10
+      daysTraffic: 10,
+      totalOperation: [],
+      selfOperation: []
     }
   },
 
@@ -119,10 +121,14 @@ export default {
     const fileResponse = await getSumFileSize()
     this.fileSize = parseFloat(fileResponse.data)
     // 2. 获取近7天访问量
-    const visitResponse = await getDaysTraffic({days: this.daysTraffic})
-    const visitData = visitResponse.data
-    this.visitor = visitData.map(item => parseInt(item.number))
-    this.date = visitData.map(item => {
+    const visitResponse = await getDaysTraffic({days: 1})
+    this.visitor = visitResponse.data[0].number;
+
+    const operationResponse = await getDaysOperation({days: this.daysTraffic})
+    const operationData = operationResponse.data
+    this.totalOperation = operationData.totalOperation.map(item => parseInt(item.number))
+    this.selfOperation = operationData.selfOperation.map(item => parseInt(item.number))
+    this.date = operationData.totalOperation.map(item => {
       return item.date.split('-')[1] + '-' + item.date.split('-')[2]
     })
     this.initEcharts()
@@ -143,7 +149,7 @@ export default {
       const option = {
         backgroundColor: '#FFF',
         title: {
-          text: '近10天的访问量\n',
+          text: '近10天的访问记录\n',
           textStyle: {
             fontSize: 14
           }
@@ -153,6 +159,10 @@ export default {
           axisPointer: {
             type: 'shadow'
           }
+        },
+        legend: {
+          data: ['您', '总数'],
+          top: '18'
         },
         grid: {
           left: '3%',
@@ -203,6 +213,7 @@ export default {
           }],
         series: [
           {
+            name: '总数',
             smooth: true,
             type: 'line',
             color: 'rgb(0, 143, 251)',
@@ -225,7 +236,33 @@ export default {
                 globalCoord: false
               }
             },
-            data: this.visitor
+            data: this.totalOperation
+          },
+          {
+            name: '您',
+            smooth: true,
+            type: 'line',
+            color: 'rgba(82, 222, 151, 1)',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0,
+                  color: 'rgba(82, 222, 151, 0.8)'
+                },
+                  {
+                    offset: 1,
+                    color: '#fff'
+                  }
+                ],
+                globalCoord: false
+              }
+            },
+            data: this.selfOperation
           }
         ]
       }
