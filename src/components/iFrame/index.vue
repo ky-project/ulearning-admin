@@ -36,5 +36,7 @@ export default {
   .app-container {
     margin: 0;
     padding: 5px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
   }
 </style>
