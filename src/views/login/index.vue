@@ -131,7 +131,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', { ...this.loginForm, uuid: this.code.uuid }).then(() => {
+          this.$store.dispatch('user/login', { ...this.loginForm, uuid: this.code.uuid, loginType: 1 }).then(() => {
             console.log('跳转到主页')
             this.$router.push({ path: '/' })
             this.loading = false

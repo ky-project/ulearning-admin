@@ -218,7 +218,6 @@ export default {
       this.listLoading = true
       getStudentPageList(this.listQuery)
         .then(response => {
-          console.log('response')
           const { content, total } = response.data
           this.list = content
           this.total = total
