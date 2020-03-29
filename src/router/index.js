@@ -12,7 +12,8 @@ import {
   MONITOR,
   TASK_SCHEDULING,
   FILE,
-  DOCUMENT
+  DOCUMENT,
+  API
 } from './config'
 Vue.use(Router)
 
@@ -76,7 +77,7 @@ export const constantRoutes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard', icon: 'dashboard' }
+        meta: { title: '主页', icon: 'dashboard' }
       }
     ]
   }
@@ -260,6 +261,22 @@ export const asyncRoutes = [
         meta: { title: '日志管理', icon: 'rizhi', permission: LOG }
       },
       {
+        path: 'file-manage',
+        name: 'FileManage',
+        component: () => import('@/views/fileManage/index'),
+        meta: {
+          title: '文件管理',
+          icon: 'wenjianguanli',
+          permission: FILE
+        }
+      },
+      {
+        path: 'api-monitor',
+        name: 'ApiMonitor',
+        component: () => import('@/views/apiMonitor/index'),
+        meta: { title: '接口监控', icon: 'fenpei', permission: API }
+      },
+      {
         path: 'server-monitor',
         name: 'ServerMonitor',
         component: () => import('@/views/serverMonitor/index'),
@@ -277,14 +294,6 @@ export const asyncRoutes = [
           title: '任务调度中心',
           icon: 'renwutiaodu',
           permission: TASK_SCHEDULING
-        }
-      },
-      {
-        path: 'http://????',
-        meta: {
-          title: '文件管理',
-          icon: 'wenjianguanli',
-          permission: FILE
         }
       }
     ]

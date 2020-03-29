@@ -51,17 +51,13 @@
           name="code"
           type="text"
           tabindex="3"
+          @change="handleLogin"
         />
         <span class="seperator">|</span>
         <img :src="code.img" alt="" @click="getcode">
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
 
     </el-form>
   </div>
@@ -86,9 +82,10 @@ export default {
         uuid: ''
       },
       loginForm: {
-        username: '16620216',
-        password: '123456',
-        code: ''
+        username: '',
+        password: '',
+        code: '',
+        loginType: 1
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', message: '请输入用户名' }],

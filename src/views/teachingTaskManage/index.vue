@@ -6,6 +6,7 @@
         placeholder="课程名"
         style="width: 200px;"
         class="filter-item"
+         size="small"
       >
         <el-option
           v-for="item in courseList"
@@ -19,6 +20,7 @@
         placeholder="教师名"
         style="width: 200px;"
         class="filter-item"
+        size="small"
       >
         <el-option
           v-for="item in teacherList"
@@ -32,6 +34,7 @@
         placeholder="学期"
         style="width: 200px;"
         class="filter-item"
+        size="small"
       >
         <el-option
           v-for="item in termList"
@@ -40,13 +43,13 @@
           :value="item.termItem"
         />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" @click="handleReset">
+      <el-button v-waves size="small" round class="filter-item" type="primary" @click="handleReset">
         重置
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves size="small" round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button class="filter-item fr" size="small" round="" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -56,9 +59,16 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column label="课程名" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.course.courseName }}</span>
@@ -99,6 +109,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -226,7 +237,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         courseId: '',
         teaId: '',
         term: ''

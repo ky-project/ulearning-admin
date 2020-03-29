@@ -7,11 +7,6 @@
     style="width: 100%"
   >
     <el-table-column
-      type="index"
-      width="50"
-      label="#"
-    />
-    <el-table-column
       prop="logUsername"
       label="姓名"
       width="100"

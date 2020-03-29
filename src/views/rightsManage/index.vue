@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select
+        size="small"
         v-model="listQuery.permissionGroup"
         style="width: 200px"
         class="filter-item"
@@ -10,14 +11,14 @@
       >
         <el-option v-for="item in rightsGroup" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-input v-model="listQuery.permissionName" class="filter-item" style="width: 200px" placeholder="权限名" />
-      <el-button v-waves class="filter-item" type="primary" @click="handleReset">
+      <el-input size="small" v-model="listQuery.permissionName" class="filter-item" style="width: 200px" placeholder="权限名" />
+      <el-button v-waves round size="small" class="filter-item" type="primary" @click="handleReset">
         重置
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves round size="small" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button round size="small" class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -28,9 +29,16 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column label="权限组" align="center" min-width="100">
         <template slot-scope="{row}">
           <span>{{ row.permissionGroup }}</span>
@@ -71,6 +79,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -132,7 +141,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         permissionGroup: '',
         permissionName: ''
       },

@@ -2,11 +2,13 @@
   <div class="app-container">
     <!-- 查询 -->
     <div class="filter-container">
-      <el-input v-model="listQuery.stuName" placeholder="姓名" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.stuNumber" placeholder="学号" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.stuDept" placeholder="系部" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.stuName" size="small" placeholder="姓名" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.stuNumber" size="small" placeholder="学号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.stuDept" size="small" placeholder="系部" style="width: 200px;" class="filter-item" />
       <el-button
         v-waves
+        round
+        size="small"
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -15,6 +17,19 @@
         查询
       </el-button>
       <el-button
+        size="small"
+        round
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownloadTemplate"
+      >
+        下载模板
+      </el-button>
+      <el-button
+        size="small"
+        round
         class="filter-item fr"
         style="margin-left: 10px;"
         type="primary"
@@ -31,9 +46,16 @@
       :data="list"
       border
       fit
+      size="small"
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column
+        label="序号"
+        type="index"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column label="学号" prop="stuNumber" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.stuNumber }}</span>
@@ -89,6 +111,7 @@
     <pagination
       v-show="total>0"
       :total="total"
+      :page-sizes="[8, 16, 32, 64]"
       :page.sync="listQuery.currentPage"
       :limit.sync="listQuery.pageSize"
       class="fr"
@@ -173,7 +196,7 @@ export default {
       listLoading: true,
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
         stuName: '',
         stuNumber: '',
         stuDept: ''
@@ -308,7 +331,15 @@ export default {
             this.getList()
           })
       })
-    }
+    },
+    handleDownloadTemplate(){
+      let a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = process.env.VUE_APP_BASE_API + '/system-manage/student/downloadTemplate'
+      document.body.appendChild(a)
+      a.click() // 触发点击
+      document.body.removeChild(a) // 然后移除
+    },
   }
 }
 </script>
