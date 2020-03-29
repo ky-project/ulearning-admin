@@ -30,9 +30,10 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      height="600"
       size="small"
     >
-      <el-table-column type="expand">
+      <el-table-column type="expand" fixed>
         <template slot-scope="{row}">
           <el-form label-position="left" :inline="true" class="demo-api-table-expand" size="mini">
             <el-form-item label="请求最慢发生时间">
