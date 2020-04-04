@@ -26,6 +26,35 @@
       >
         添加
       </el-button>
+      <Upload
+        url="/system-manage/teacher/importExcel"
+        file-key="file"
+        class-name="fr"
+        :on-success="uploadSuccess"
+        :on-error="uploadError"
+      >
+        <el-button
+          size="small"
+          round
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-download"
+        >
+          批量导入
+        </el-button>
+      </Upload>
+      <el-button
+        size="small"
+        round
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownloadTemplate"
+      >
+        下载模板
+      </el-button>
     </div>
 
     <el-table
@@ -42,8 +71,8 @@
         label="序号"
         type="index"
         align="center"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="工号" prop="teaNumber" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.teaNumber }}</span>
@@ -174,6 +203,7 @@
 </template>
 
 <script>
+import Upload from '@/components/Upload'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { isEmail, isPhone } from '@/utils/validate'
@@ -183,7 +213,7 @@ import { getRolesList } from '@/api/role-manage'
 
 export default {
   name: 'TeacherManage',
-  components: { Pagination, PopTransfer },
+  components: { Pagination, PopTransfer, Upload },
   directives: { waves },
   data() {
     const checkPhone = (rule, value, callback) => {
@@ -253,6 +283,21 @@ export default {
     this.getRolesList()
   },
   methods: {
+    uploadSuccess() {
+      this.$message.success('上传成功')
+    },
+    uploadError(error) {
+      this.$message.error(error.message || '出错')
+    },
+    // 下载教师模板
+    handleDownloadTemplate() {
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = process.env.VUE_APP_BASE_API + '/system-manage/teacher/downloadTemplate'
+      document.body.appendChild(a)
+      a.click() // 触发点击
+      document.body.removeChild(a) // 然后移除
+    },
     close() {
       this.visible = false
     },

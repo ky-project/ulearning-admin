@@ -19,13 +19,14 @@
       <Upload
         url="/system-manage/student/importExcel"
         file-key="file"
+        class-name="fr"
         :on-success="uploadSuccess"
         :on-error="uploadError"
       >
         <el-button
           size="small"
           round
-          class="filter-item fr"
+          class="filter-item"
           style="margin-left: 10px;"
           type="primary"
           icon="el-icon-download"
