@@ -8,12 +8,14 @@
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
         <h1 class="sidebar-title">{{ title }} </h1>
+        <h3 class="sidebar-subTitle">{{ subTitle }}</h3>
       </router-link>
     </transition>
   </div>
 </template>
 
 <script>
+import logo from '@/assets/images/logo.png'
 export default {
   name: 'SidebarLogo',
   props: {
@@ -24,8 +26,9 @@ export default {
   },
   data() {
     return {
-      title: 'U-Learning后台管理系统',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: 'U-Learning',
+      subTitle: '管理员',
+      logo: logo
     }
   }
 }
@@ -59,17 +62,28 @@ export default {
       height: 32px;
       vertical-align: middle;
       margin-right: 12px;
+      background-color: #fff;
+      // padding: 10px;
+      border-radius: 50%;
     }
 
     & .sidebar-title {
       display: inline-block;
-      margin: 0;
+      margin: 0 5px 0 0;
       color: #fff;
       font-weight: 600;
       line-height: 50px;
-      font-size: 14px;
+      font-size: 18px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
+    }
+    & .sidebar-subTitle {
+      display: inline-block;
+      vertical-align: -7px;
+      margin: 0;
+      font-size: 12px;
+      color: #fff;
+      font-weight: normal;
     }
   }
 
