@@ -15,6 +15,12 @@ const service = axios.create({
   headers: { 'content-type': 'application/x-www-form-urlencoded' }
 })
 
+// 不转化data格式
+const service2 = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API,
+  timeout: 5000
+})
+
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -117,3 +123,4 @@ service.interceptors.response.use(
 )
 
 export default service
+export const axios2 = service2

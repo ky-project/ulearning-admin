@@ -16,6 +16,23 @@
       >
         查询
       </el-button>
+      <Upload
+        url="/system-manage/student/importExcel"
+        file-key="file"
+        :on-success="uploadSuccess"
+        :on-error="uploadError"
+      >
+        <el-button
+          size="small"
+          round
+          class="filter-item fr"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-download"
+        >
+          批量导入
+        </el-button>
+      </Upload>
       <el-button
         size="small"
         round
@@ -54,8 +71,8 @@
         label="序号"
         type="index"
         align="center"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="学号" prop="stuNumber" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.stuNumber }}</span>
@@ -161,6 +178,7 @@
 </template>
 
 <script>
+import Upload from '@/components/Upload'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { isEmail, isPhone } from '@/utils/validate'
@@ -168,7 +186,7 @@ import { getStudentPageList, updateStudent, addStudent, deleteStudent } from '@/
 
 export default {
   name: 'StudentManage',
-  components: { Pagination },
+  components: { Pagination, Upload },
   directives: { waves },
   data() {
     const checkPhone = (rule, value, callback) => {
@@ -231,6 +249,12 @@ export default {
     this.getList()
   },
   methods: {
+    uploadSuccess() {
+      this.$message.success('上传成功')
+    },
+    uploadError(error) {
+      this.$message.error(error.message || '出错')
+    },
     updatePage(val) {
       this.listQuery.currentPage = val
     },
@@ -332,14 +356,14 @@ export default {
           })
       })
     },
-    handleDownloadTemplate(){
-      let a = document.createElement('a')
+    handleDownloadTemplate() {
+      const a = document.createElement('a')
       a.style.display = 'none'
       a.href = process.env.VUE_APP_BASE_API + '/system-manage/student/downloadTemplate'
       document.body.appendChild(a)
       a.click() // 触发点击
       document.body.removeChild(a) // 然后移除
-    },
+    }
   }
 }
 </script>
