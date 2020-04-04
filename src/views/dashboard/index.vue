@@ -33,7 +33,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="16">
+        <el-col :xs="24" :sm="18">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
               <span><svg-icon icon-class="yonghu1" class-name="icon"/>访问记录</span>
@@ -41,7 +41,7 @@
             <div id="visit-count-chart" style="width: 100%;height: 400px"/>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="8">
+        <el-col :xs="24" :sm="6">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
               <span><svg-icon icon-class="caozuojilu" class-name="icon"/>操作记录</span>
@@ -342,8 +342,7 @@ export default {
 
       .operation {
         width: 100%;
-        margin-top: 0;
-        margin-left: 10px;
+        margin: 5px 10px 5px 5px;
         padding-left: 0;
         line-height: 25px;
         list-style: none;
@@ -385,10 +384,5 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
-  }
-</style>
-<style lang='scss'>
-  .el-scrollbar__wrap {
-    overflow-x: hidden;
   }
 </style>

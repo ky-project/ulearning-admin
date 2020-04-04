@@ -21,3 +21,11 @@ export default {
   }
 }
 </script>
+<style lang='scss'>
+  .el-scrollbar .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+  .el-select-dropdown .el-scrollbar {
+    padding-bottom: 17px;
+  }
+</style>

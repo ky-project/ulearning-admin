@@ -15,17 +15,6 @@
       >
         查询
       </el-button>
-      <el-button
-        round
-        size="small"
-        class="filter-item fr"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-plus"
-        @click="handleCreate"
-      >
-        添加
-      </el-button>
       <Upload
         url="/system-manage/teacher/importExcel"
         file-key="file"
@@ -54,6 +43,17 @@
         @click="handleDownloadTemplate"
       >
         下载模板
+      </el-button>
+      <el-button
+        round
+        size="small"
+        class="filter-item fr"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleCreate"
+      >
+        添加
       </el-button>
     </div>
 
