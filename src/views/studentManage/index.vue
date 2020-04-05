@@ -73,6 +73,7 @@
         type="index"
         align="center"
         width="50"
+        :index="indexMethod"
       />
       <el-table-column label="学号" prop="stuNumber" align="center" width="120">
         <template slot-scope="{row}">
@@ -110,6 +111,7 @@
             :style="{color: '#409EFF'}"
             type="text"
             size="mini"
+            title="修改"
             @click="handleUpdate(row)"
           >
             <i class="el-icon-edit" />
@@ -118,6 +120,7 @@
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
+            title="删除"
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
@@ -405,6 +408,9 @@ export default {
       document.body.appendChild(a)
       a.click() // 触发点击
       document.body.removeChild(a) // 然后移除
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }

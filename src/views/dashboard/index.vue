@@ -33,18 +33,34 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="16">
+        <el-col :xs="24" :sm="18">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="yonghu1" class-name="icon"/>访问记录</span>
+              <span><svg-icon icon-class="caozuojilu" class-name="icon"/>操作记录</span>
+              <el-button
+                class="refresh_button"
+                type="text"
+                size="mini"
+                :loading="chartsLoad"
+                @click="initOperationCharts">
+                <svg-icon icon-class="shuaxin"/>
+              </el-button>
             </div>
             <div id="visit-count-chart" style="width: 100%;height: 400px"/>
           </el-card>
         </el-col>
-        <el-col :xs="24" :sm="8">
+        <el-col :xs="24" :sm="6">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="caozuojilu" class-name="icon"/>操作记录</span>
+              <span><svg-icon icon-class="caozuorizhi" class-name="icon"/>操作日志</span>
+              <el-button
+                class="refresh_button"
+                type="text"
+                size="mini"
+                :loading="operationListLoad"
+                @click="getOperationList">
+                <svg-icon icon-class="shuaxin"/>
+              </el-button>
             </div>
             <!--<operate-table height="400px" />-->
             <el-scrollbar style="width:100%; height: 400px">
@@ -52,7 +68,6 @@
                 <li v-for="item in list">
                   <span><svg-icon icon-class="yuanquan" class-name="icon"/>    {{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;IP:{{ item.logIp }}</span>
                   <p>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {{ item.logUsername }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.logDescription }}
                   </p>
                 </li>
@@ -71,7 +86,7 @@ import echarts from 'echarts'
 import resize from '@/components/Charts/mixins/resize'
 import OperateTable from './components/OperateTable'
 import {getSumFileSize} from '@/api/file-manage'
-import {getDaysTraffic, getLogTop, getDaysOperation} from '@/api/log-monitor'
+import {getDaysOperation, getLogTop, getTodayTraffic} from '@/api/log-monitor'
 
 export default {
   name: 'Dashboard',
@@ -86,7 +101,9 @@ export default {
       list: [],
       daysTraffic: 10,
       totalOperation: [],
-      selfOperation: []
+      selfOperation: [],
+      chartsLoad: false,
+      operationListLoad: false
     }
   },
 
@@ -116,25 +133,15 @@ export default {
     }
   },
   watch: {},
-  async created() {
-    // 1. 获取文件总量
-    const fileResponse = await getSumFileSize()
-    this.fileSize = parseFloat(fileResponse.data)
-    // 2. 获取近7天访问量
-    const visitResponse = await getDaysTraffic({days: 1})
-    this.visitor = visitResponse.data[0].number;
-
-    const operationResponse = await getDaysOperation({days: this.daysTraffic})
-    const operationData = operationResponse.data
-    this.totalOperation = operationData.totalOperation.map(item => parseInt(item.number))
-    this.selfOperation = operationData.selfOperation.map(item => parseInt(item.number))
-    this.date = operationData.totalOperation.map(item => {
-      return item.date.split('-')[1] + '-' + item.date.split('-')[2]
-    })
-    this.initEcharts()
-
-    const response = await getLogTop({topNumber: 15})
-    this.list = response.data
+  created() {
+    // 1. 加载表格
+    this.initOperationCharts();
+    // 2. 加载操作记录
+    this.getOperationList();
+    // 3. 获取文件总量
+    this.getSumFileSize();
+    // 4. 获当天访问量
+    this.getTodayTraffic();
   },
 
   beforeMount() {
@@ -144,12 +151,46 @@ export default {
   },
 
   methods: {
+    getSumFileSize() {
+      getSumFileSize()
+        .then(response => {
+          this.fileSize = parseFloat(response.data)
+        })
+    },
+    getTodayTraffic() {
+      getTodayTraffic()
+        .then(response => {
+          this.visitor = response.data.number;
+        })
+    },
+    initOperationCharts() {
+      this.chartsLoad = true;
+      getDaysOperation({days: this.daysTraffic})
+        .then(response => {
+          const operationData = response.data
+          this.totalOperation = operationData.totalOperation.map(item => parseInt(item.number))
+          this.selfOperation = operationData.selfOperation.map(item => parseInt(item.number))
+          this.date = operationData.totalOperation.map(item => {
+            return item.date.split('-')[1] + '-' + item.date.split('-')[2]
+          })
+          this.initEcharts();
+        })
+      this.chartsLoad = false;
+    },
+    getOperationList() {
+      this.operationListLoad = true;
+      getLogTop({topNumber: 15})
+        .then(response => {
+          this.list = response.data
+        })
+      this.operationListLoad = false;
+    },
     initEcharts() {
       this.chart = echarts.init(document.getElementById('visit-count-chart'))
       const option = {
         backgroundColor: '#FFF',
         title: {
-          text: '近10天的访问记录\n',
+          text: '近10天的操作记录\n',
           textStyle: {
             fontSize: 14
           }
@@ -342,21 +383,23 @@ export default {
 
       .operation {
         width: 100%;
-        margin-top: 0;
-        margin-left: 10px;
+        margin: 5px 10px 5px 5px;
         padding-left: 0;
         line-height: 25px;
         list-style: none;
+
         .icon {
           width: 12px;
           height: 12px;
           color: #6bb4ce;
         }
+
         span {
           font-weight: bold;
           font-size: 12px;
           color: #5d5d5d;
         }
+
         p {
           padding-top: 0;
           margin-top: 0;
@@ -386,9 +429,10 @@ export default {
       margin-bottom: 0;
     }
   }
-</style>
-<style lang='scss'>
-  .el-scrollbar__wrap {
-    overflow-x: hidden;
+
+  .refresh_button {
+    color: #409EFF;
+    float: right;
+    padding: 3px 0;
   }
 </style>

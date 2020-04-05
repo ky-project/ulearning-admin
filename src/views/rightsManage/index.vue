@@ -37,6 +37,7 @@
         label="序号"
         type="index"
         align="center"
+        :index="indexMethod"
         width="50">
       </el-table-column>
       <el-table-column label="权限组" align="center" min-width="100">
@@ -66,10 +67,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="handleUpdate(row)">
+          <el-button :style="{color: '#409EFF'}" title="修改" type="text" size="mini" @click="handleUpdate(row)">
             <i class="el-icon-edit" />
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" size="mini" type="text" @click="handleDelete(row,$index)">
+          <el-button :style="{color: '#F56C6C'}" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
             <i class="el-icon-delete" />
           </el-button>
         </template>
@@ -287,6 +288,9 @@ export default {
             this.getList()
           })
       })
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
   }
 }
