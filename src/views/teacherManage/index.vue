@@ -72,6 +72,7 @@
         type="index"
         align="center"
         width="50"
+        :index="indexMethod"
       />
       <el-table-column label="工号" prop="teaNumber" align="center" width="120">
         <template slot-scope="{row}">
@@ -114,6 +115,7 @@
             :style="{color: '#409EFF'}"
             type="text"
             size="mini"
+            title="分配角色"
             @click="showPopTransfer(row)"
           >
             <svg-icon icon-class="jiaosexiugai" />
@@ -122,6 +124,7 @@
             :style="{color: '#409EFF'}"
             type="text"
             size="mini"
+            title="修改"
             @click="handleUpdate(row)"
           >
             <i class="el-icon-edit" />
@@ -130,6 +133,7 @@
             :style="{color: '#F56C6C'}"
             size="mini"
             type="text"
+            title="删除"
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
@@ -430,6 +434,9 @@ export default {
             this.getList()
           })
       })
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
     /* handleFetchPv(pv) {
       fetchPv(pv).then(response => {
