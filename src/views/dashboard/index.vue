@@ -60,7 +60,7 @@
                 :loading="operationListLoad"
                 @click="getOperationList">
                 <svg-icon icon-class="shuaxin"/>
-                </el-button>
+              </el-button>
             </div>
             <!--<operate-table height="400px" />-->
             <el-scrollbar style="width:100%; height: 400px">
@@ -86,7 +86,7 @@ import echarts from 'echarts'
 import resize from '@/components/Charts/mixins/resize'
 import OperateTable from './components/OperateTable'
 import {getSumFileSize} from '@/api/file-manage'
-import {getDaysTraffic, getLogTop, getDaysOperation} from '@/api/log-monitor'
+import {getDaysOperation, getLogTop, getTodayTraffic} from '@/api/log-monitor'
 
 export default {
   name: 'Dashboard',
@@ -133,16 +133,15 @@ export default {
     }
   },
   watch: {},
-  async created() {
-    // 1. 获取文件总量
-    const fileResponse = await getSumFileSize()
-    this.fileSize = parseFloat(fileResponse.data)
-    // 2. 获取近7天访问量
-    const visitResponse = await getDaysTraffic({days: 1})
-    this.visitor = visitResponse.data[0].number;
-
+  created() {
+    // 1. 加载表格
     this.initOperationCharts();
+    // 2. 加载操作记录
     this.getOperationList();
+    // 3. 获取文件总量
+    this.getSumFileSize();
+    // 4. 获当天访问量
+    this.getTodayTraffic();
   },
 
   beforeMount() {
@@ -152,22 +151,38 @@ export default {
   },
 
   methods: {
-    async initOperationCharts(){
+    getSumFileSize() {
+      getSumFileSize()
+        .then(response => {
+          this.fileSize = parseFloat(response.data)
+        })
+    },
+    getTodayTraffic() {
+      getTodayTraffic()
+        .then(response => {
+          this.visitor = response.data.number;
+        })
+    },
+    initOperationCharts() {
       this.chartsLoad = true;
-      const operationResponse = await getDaysOperation({days: this.daysTraffic})
-      const operationData = operationResponse.data
-      this.totalOperation = operationData.totalOperation.map(item => parseInt(item.number))
-      this.selfOperation = operationData.selfOperation.map(item => parseInt(item.number))
-      this.date = operationData.totalOperation.map(item => {
-        return item.date.split('-')[1] + '-' + item.date.split('-')[2]
-      })
-      this.initEcharts();
+      getDaysOperation({days: this.daysTraffic})
+        .then(response => {
+          const operationData = response.data
+          this.totalOperation = operationData.totalOperation.map(item => parseInt(item.number))
+          this.selfOperation = operationData.selfOperation.map(item => parseInt(item.number))
+          this.date = operationData.totalOperation.map(item => {
+            return item.date.split('-')[1] + '-' + item.date.split('-')[2]
+          })
+          this.initEcharts();
+        })
       this.chartsLoad = false;
     },
-    async getOperationList(){
+    getOperationList() {
       this.operationListLoad = true;
-      const response = await getLogTop({topNumber: 15})
-      this.list = response.data
+      getLogTop({topNumber: 15})
+        .then(response => {
+          this.list = response.data
+        })
       this.operationListLoad = false;
     },
     initEcharts() {

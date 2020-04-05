@@ -35,11 +35,10 @@ export function getLogTop(data) {
   })
 }
 
-// 查询近n天的访问量
-export function getDaysTraffic(data) {
-  const params = qs.stringify(data)
+// 查询当天的访问量
+export function getTodayTraffic() {
   return request({
-    url: `/monitor-manage/log/getDaysTraffic?${params}`,
+    url: `/monitor-manage/log/getTodayTraffic`,
     method: 'GET'
   })
 }
