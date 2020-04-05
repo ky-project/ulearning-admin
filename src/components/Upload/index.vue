@@ -49,7 +49,7 @@ export default {
     },
     onSuccess: {
       type: Function,
-      default: () => {}
+      default: (response) => {}
     },
     onError: {
       type: Function,
@@ -89,8 +89,8 @@ export default {
           url: this.url,
           data: formData,
           headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(() => {
-          this.onSuccess()
+        }).then((response) => {
+          this.onSuccess(response)
         }).catch(error => {
           this.onError(error)
         })

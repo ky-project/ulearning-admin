@@ -175,6 +175,31 @@
         </el-button>
       </div>
     </el-dialog>
+    <!-- 提示消息 -->
+    <el-dialog
+      class-name="error-dialog"
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <span>{{ dialogTitle }}</span>
+      <ul>
+        <li
+          v-for="item in dialogMessageList"
+          :key="item.line"
+          :style="{lineHeight: '23px'}"
+        >
+          {{ `第${item.line}行：${item.errorMsg}` }}
+        </li>
+      </ul>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -243,17 +268,33 @@ export default {
         stuNumber: [{ required: true, message: '请输入工号', trigger: 'blur' }],
         stuPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
         stuEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
-      }
+      },
+      dialogVisible: false, // 消息提示
+      dialogTitle: '', //
+      dialogMessageList: [] // {line:xxx, errorMsg:xxx}
     }
   },
   created() {
     this.getList()
   },
   methods: {
-    uploadSuccess() {
-      this.$message.success('上传成功')
+    uploadSuccess(response) {
+      const { message, data } = response.data
+      if (message && data) {
+        this.dialogVisible = true
+        this.dialogTitle = message
+        this.dialogMessageList = Object.keys(data).map(key => {
+          return {
+            line: key,
+            errorMsg: data[key].errorMsg
+          }
+        })
+      } else {
+        this.$message.success('导入成功')
+      }
     },
     uploadError(error) {
+      console.log('hi')
       this.$message.error(error.message || '出错')
     },
     updatePage(val) {
@@ -376,6 +417,15 @@ export default {
     vertical-align: middle;
     margin-bottom: 10px;
   }
+  /* .error-dialog {
+    // &::v-deep .el-dialog__body
+    &::v-deep ul {
+      list-style: none;
+      li {
+        line-height: 23px;
+      }
+    }
+  } */
 }
 </style>
 <style lang="scss">
