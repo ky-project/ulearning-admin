@@ -29,7 +29,7 @@
           class="filter-item"
           style="margin-left: 10px;"
           type="primary"
-          icon="el-icon-download"
+          icon="el-icon-upload2"
         >
           批量导入
         </el-button>
