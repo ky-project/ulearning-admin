@@ -70,7 +70,7 @@ export default {
         if (this.validate) {
           const result = this.validate(curFile)
           if (!result) {
-            this.$message.error(this.errorMsg)
+            // this.$message.error(this.errorMsg)
             return false
           }
         }

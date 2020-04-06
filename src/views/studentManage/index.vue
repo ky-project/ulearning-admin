@@ -298,7 +298,7 @@ export default {
     },
     uploadError(error) {
       console.log('hi')
-      this.$message.error(error.message || '出错')
+      // this.$message.error(error.message || '出错')
     },
     updatePage(val) {
       this.listQuery.currentPage = val

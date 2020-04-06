@@ -331,7 +331,7 @@ export default {
       }
     },
     uploadError(error) {
-      this.$message.error(error.message || '出错')
+      // this.$message.error(error.message || '出错')
     },
     // 下载教师模板
     handleDownloadTemplate() {
