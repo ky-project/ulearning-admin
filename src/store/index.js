@@ -8,6 +8,10 @@ import permission from './modules/permission'
 import VuexPersistence from 'vuex-persist' // 持久化存储
 
 Vue.use(Vuex)
+const vuexLocal = new VuexPersistence({
+  storage: window.sessionStorage,
+  modules: ['app', 'settings', 'permission']
+})
 
 const store = new Vuex.Store({
   modules: {
@@ -17,7 +21,7 @@ const store = new Vuex.Store({
     permission
   },
   getters,
-  plugins: [new VuexPersistence({ storage: window.sessionStorage }).plugin]
+  plugins: [vuexLocal.plugin]
 })
 
 export default store

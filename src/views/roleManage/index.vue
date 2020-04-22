@@ -38,8 +38,8 @@
         type="index"
         align="center"
         :index="indexMethod"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="角色名" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.roleName }}</span>
@@ -218,9 +218,11 @@ export default {
     async showPopTransfer(row) {
       this.selectRoleId = row.id
       const response = await getAssignedPermission({ roleId: row.id })
+      console.log('response', response)
       this.chooseList = response.data.map(item => {
         return item.key
       })
+      console.log('chooseList', this.chooseList)
       this.visible = true
     },
     deleteItem(index) {
