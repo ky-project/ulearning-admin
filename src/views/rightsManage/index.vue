@@ -18,7 +18,7 @@
       <el-button v-waves round size="small" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button v-permission="['permission:save']" round size="small" class="filter-item fr" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button v-permission="['permission:save']" round size="small" class="filter-item fr" style="margin-left: 10px;" type="success" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -65,13 +65,13 @@
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="90" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button v-permission="['permission:update']" :style="{color: '#409EFF'}" title="修改" type="text" size="mini" @click="handleUpdate(row)">
-            <i class="el-icon-edit" />
+          <el-button v-permission="['permission:update']" type="primary" round size="mini" @click="handleUpdate(row)">
+            修改
           </el-button>
-          <el-button v-permission="['permission:delete']" :style="{color: '#F56C6C'}" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
-            <i class="el-icon-delete" />
+          <el-button v-permission="['permission:delete']" round size="mini" type="danger" @click="handleDelete(row,$index)">
+            删除
           </el-button>
         </template>
       </el-table-column>

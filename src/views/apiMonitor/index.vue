@@ -68,7 +68,7 @@
           <span>{{ row.uri }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最大并发" width="60" align="center">
+      <el-table-column label="最大并发" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.concurrentMax }}</span>
         </template>
@@ -83,27 +83,27 @@
           <span>{{ row.requestTimeMillisMax }} ms</span>
         </template>
       </el-table-column>
-      <el-table-column label="请求时间和" width="100" align="center">
+      <el-table-column label="平均请求时间" width="110" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.requestTimeMillis }} ms</span>
+          <span>{{ parseInt(row.requestTimeMillis / row.requestCount) }} ms</span>
         </template>
       </el-table-column>
-      <el-table-column label="请求次数" width="60" align="center">
+      <el-table-column label="请求次数" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.requestCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="事务回滚数" width="70" align="center">
+      <el-table-column label="事务回滚数" width="110" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcRollbackCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新行数" width="60" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.jdbcUpdateCount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="读取行数" width="60" align="center">
+      <!--<el-table-column label="更新行数" width="60" align="center">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<span>{{ row.jdbcUpdateCount }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <el-table-column label="读取行数" width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcFetchRowCount }}</span>
         </template>
@@ -113,21 +113,21 @@
           <span>{{ row.jdbcExecuteTimeMillis }} ms</span>
         </template>
       </el-table-column>
-      <el-table-column label="jdbc出错数" width="80" align="center">
+      <el-table-column label="jdbc出错数" width="100" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcExecuteErrorCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="jdbc执行数" width="80" align="center">
+      <el-table-column label="jdbc执行数" width="100" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcExecuteCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="事务提交数" width="70" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.jdbcCommitCount }}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="事务提交数" width="70" align="center">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<span>{{ row.jdbcCommitCount }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
 
   </div>

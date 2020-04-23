@@ -27,7 +27,7 @@
           round
           class="filter-item"
           style="margin-left: 10px;"
-          type="primary"
+          type="success"
           v-permission="['teacher:importExcel']"
           icon="el-icon-upload2"
         >
@@ -39,7 +39,7 @@
         round
         class="filter-item fr"
         style="margin-left: 10px;"
-        type="primary"
+        type="info"
         icon="el-icon-download"
         v-permission="['teacher:downloadTemplate']"
         @click="handleDownloadTemplate"
@@ -51,7 +51,7 @@
         size="small"
         class="filter-item fr"
         style="margin-left: 10px;"
-        type="primary"
+        type="success"
         icon="el-icon-plus"
         v-permission="['teacher:save']"
         @click="handleCreate"
@@ -112,37 +112,34 @@
           <span>{{ row.teaEmail }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="80" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="190" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
-            :style="{color: '#409EFF'}"
-            type="text"
+            type="primary"
             size="mini"
-            title="分配角色"
+            round
             v-permission="['teacher:saveAssignedRole']"
             @click="showPopTransfer(row)"
           >
-            <svg-icon icon-class="jiaosexiugai" />
+            分配角色
           </el-button>
           <el-button
-            :style="{color: '#409EFF'}"
-            type="text"
+            type="primary"
             size="mini"
-            title="修改"
+            round
             v-permission="['teacher:update']"
             @click="handleUpdate(row)"
           >
-            <i class="el-icon-edit" />
+            修改
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="删除"
+            type="danger"
+            round
             v-permission="['teacher:delete']"
             @click="handleDelete(row,$index)"
           >
-            <i class="el-icon-delete" />
+            删除
           </el-button>
         </template>
       </el-table-column>

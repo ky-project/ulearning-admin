@@ -28,7 +28,7 @@
           round
           class="filter-item"
           style="margin-left: 10px;"
-          type="primary"
+          type="success"
           v-permission="['student:importExcel']"
           icon="el-icon-upload2"
         >
@@ -38,9 +38,9 @@
       <el-button
         size="small"
         round
-        class="filter-item fr"
+        class="filter-item fr pan-btn green-btn"
         style="margin-left: 10px;"
-        type="primary"
+        type="info"
         icon="el-icon-download"
         v-permission="['student:downloadTemplate']"
         @click="handleDownloadTemplate"
@@ -52,7 +52,7 @@
         round
         class="filter-item fr"
         style="margin-left: 10px;"
-        type="primary"
+        type="success"
         icon="el-icon-plus"
         v-permission="['student:save']"
         @click="handleCreate"
@@ -108,27 +108,25 @@
           <span>{{ row.stuEmail }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="95" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
-            :style="{color: '#409EFF'}"
-            type="text"
+            type="primary"
             size="mini"
-            title="修改"
+            round
             v-permission="['student:update']"
             @click="handleUpdate(row)"
           >
-            <i class="el-icon-edit" />
+            修改
           </el-button>
           <el-button
-            :style="{color: '#F56C6C'}"
             size="mini"
-            type="text"
-            title="删除"
+            type="danger"
+            round
             v-permission="['student:delete']"
             @click="handleDelete(row,$index)"
           >
-            <i class="el-icon-delete" />
+            删除
           </el-button>
         </template>
       </el-table-column>

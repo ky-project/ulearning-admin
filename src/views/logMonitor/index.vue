@@ -32,7 +32,7 @@
       <el-button v-waves class="filter-item" size="small" type="primary" round icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button v-waves v-permission="['logHistory:download', 'logHistory:getVoList']" class="filter-item fr" size="small" type="primary" round icon="el-icon-download" @click="handleDownload()">
+      <el-button v-waves v-permission="['logHistory:download', 'logHistory:getVoList']" class="filter-item fr" size="small" type="info" round icon="el-icon-download" @click="handleDownload()">
         历史日志下载
       </el-button>
     </div>

@@ -61,13 +61,13 @@
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="140" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" v-permission="['fileRecord:download']" title="下载" size="mini" type="text" @click="downLoadFile(row.id)">
-            <i class="el-icon-download"/>
+          <el-button v-permission="['fileRecord:download']" round size="mini" type="info" @click="downLoadFile(row.id)">
+            下载
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" v-permission="['fileRecord:delete']" title="删除" size="mini" type="text" @click="handleDelete(row.id)">
-            <i class="el-icon-delete" />
+          <el-button v-permission="['fileRecord:delete']" round size="mini" type="danger" @click="handleDelete(row.id)">
+            删除
           </el-button>
         </template>
       </el-table-column>
