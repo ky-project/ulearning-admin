@@ -49,7 +49,7 @@
       <el-button v-waves size="small" round class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item fr" size="small" round="" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button v-permission="['teachingTask:save']" class="filter-item fr" size="small" round="" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -97,10 +97,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" title="修改" type="text" size="mini" @click="handleUpdate(row)">
+          <el-button :style="{color: '#409EFF'}" v-permission="['teachingTask:update']" title="修改" type="text" size="mini" @click="handleUpdate(row)">
             <i class="el-icon-edit" />
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
+          <el-button :style="{color: '#F56C6C'}" v-permission="['teachingTask:delete']" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
             <i class="el-icon-delete" />
           </el-button>
         </template>
@@ -191,6 +191,7 @@ import { isEmail, isPhone } from '@/utils/validate'
 import { getTaskPageList, updateTask, addTask, deleteTask, getTermList } from '@/api/teaching-task-manage'
 import { getAllCourse } from '@/api/course-manage'
 import { getAllTeacher } from '@/api/teacher-manage'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   /*  {
@@ -213,7 +214,7 @@ export default {
 			} */
   name: 'TeachingTaskManage',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   filters: {
     /* statusFilter(status) {
       const statusMap = {
@@ -305,7 +306,6 @@ export default {
       getTaskPageList(this.listQuery)
         .then(response => {
           const { content, total } = response.data
-          console.log('content', content)
           this.list = content
           this.total = total
           this.listLoading = false
@@ -339,7 +339,6 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // 1. 添加教师
-          console.log(this.temp)
           addTask(this.temp)
             .then(response => {
               this.$message({
@@ -361,10 +360,8 @@ export default {
       })
     },
     updateData() {
-      // console.log('更新数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log('校验成功')
           // 1. 发送请求
           updateTask(this.temp)
             .then(response => {

@@ -224,7 +224,6 @@ export default {
     getAssignedPermission(id) {
       return getAssignedPermission({ roleId: id })
         .then(response => {
-          console.log('response', response)
           this.assignedPrivilege = this.formatPrivilege(response.data)
           return Promise.resolve('success')
         })
@@ -236,7 +235,6 @@ export default {
           const temp = this.formatPrivilege(response.data)
           this.allPrivilege = temp
           // this.restPrivilege = temp
-          console.log('allPrivilege', this.allPrivilege)
         })
     },
     // 获取未分配的权限
@@ -256,7 +254,6 @@ export default {
           this.restPrivilege.push(allItem)
         }
       }
-      console.log('restPrivilege', this.restPrivilege)
     },
     handleReset() {
       this.listQuery.roleName = ''
@@ -325,11 +322,9 @@ export default {
     async handleUpdate(row) {
       // 1. 请求获取该角色已有的权限
       const result = await this.getAssignedPermission(row.id)
-      console.log('assignedPrivilege', this.assignedPrivilege)
       if (result === 'success') {
         // 2. 计算剩余权限
         this.getRestPrivilege()
-        console.log('restPrivilege', this.restPrivilege)
         // 3. 设置要显示的角色信息
         this.temp = Object.assign({}, row) // copy obj
         this.dialogStatus = 'update'

@@ -6,7 +6,7 @@
       <el-button v-waves class="filter-item" size="small" round type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item fr" size="small" round style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button v-permission="['course:save']" class="filter-item fr" size="small" round style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -50,10 +50,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" title="修改" type="text" size="mini" @click="handleUpdate(row)">
+          <el-button :style="{color: '#409EFF'}" v-permission="['course:update']" title="修改" type="text" size="mini" @click="handleUpdate(row)">
             <i class="el-icon-edit" />
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
+          <el-button :style="{color: '#F56C6C'}" v-permission="['course:delete']" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
             <i class="el-icon-delete" />
           </el-button>
         </template>
@@ -112,11 +112,12 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { isEmail, isPhone } from '@/utils/validate'
 import { getCoursePageList, updateCourse, addCourse, deleteCourse } from '@/api/course-manage'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'CourseManage',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -200,11 +201,9 @@ export default {
     },
     getList() {
       this.listLoading = true
-      console.log('listQuery', this.listQuery)
       getCoursePageList(this.listQuery)
         .then(response => {
           const { content, total } = response.data
-          console.log('content', content)
           this.list = content
           this.total = total
           this.listLoading = false
@@ -261,7 +260,6 @@ export default {
       })
     },
     createData() {
-      console.log('添加数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // 1. 添加课程
@@ -286,10 +284,8 @@ export default {
       })
     },
     updateData() {
-      // console.log('更新数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log('校验成功')
           // 1. 发送请求
           updateCourse(this.temp)
             .then(response => {

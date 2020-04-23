@@ -29,6 +29,7 @@
           class="filter-item"
           style="margin-left: 10px;"
           type="primary"
+          v-permission="['student:importExcel']"
           icon="el-icon-upload2"
         >
           批量导入
@@ -41,6 +42,7 @@
         style="margin-left: 10px;"
         type="primary"
         icon="el-icon-download"
+        v-permission="['student:downloadTemplate']"
         @click="handleDownloadTemplate"
       >
         下载模板
@@ -52,6 +54,7 @@
         style="margin-left: 10px;"
         type="primary"
         icon="el-icon-plus"
+        v-permission="['student:save']"
         @click="handleCreate"
       >
         添加
@@ -112,6 +115,7 @@
             type="text"
             size="mini"
             title="修改"
+            v-permission="['student:update']"
             @click="handleUpdate(row)"
           >
             <i class="el-icon-edit" />
@@ -121,6 +125,7 @@
             size="mini"
             type="text"
             title="删除"
+            v-permission="['student:delete']"
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
@@ -212,11 +217,12 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { isEmail, isPhone } from '@/utils/validate'
 import { getStudentPageList, updateStudent, addStudent, deleteStudent } from '@/api/student-manage'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'StudentManage',
   components: { Pagination, Upload },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -297,7 +303,6 @@ export default {
       }
     },
     uploadError(error) {
-      console.log('hi')
       // this.$message.error(error.message || '出错')
     },
     updatePage(val) {
@@ -343,7 +348,6 @@ export default {
       })
     },
     createData() {
-      console.log('添加数据')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // 1. 添加学生
@@ -370,7 +374,6 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log('校验成功')
           // 1. 发送请求
           updateStudent(this.temp)
             .then(response => {

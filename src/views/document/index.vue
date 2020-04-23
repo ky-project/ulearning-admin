@@ -1,7 +1,6 @@
 <template>
   <i-frame
     :src="document"
-    @refresh="refresh"
   />
 </template>
 <script>

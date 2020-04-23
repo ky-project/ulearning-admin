@@ -53,7 +53,6 @@ const actions = {
       const routes = filterAsyncRoutes(wrapRoutes, permissions)
       // 解包路由
       const accessRoutes = routes.node.children
-      console.log('accessRoutes', accessRoutes)
       commit('SET_ROUTES', accessRoutes)
       resolve(accessRoutes)
     })

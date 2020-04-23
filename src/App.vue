@@ -15,7 +15,6 @@ export default {
   },
   methods: {
     beforeunloadFn(e) {
-      console.log('刷新了')
       this.$store.dispatch('app/setFresh', true)
     }
   }
@@ -28,4 +27,8 @@ export default {
   .el-select-dropdown .el-scrollbar {
     padding-bottom: 17px;
   }
+  body .el-table th.gutter{
+    display: table-cell!important;
+  }
+
 </style>

@@ -1,7 +1,6 @@
 <template>
   <i-frame
     :src="task_scheduling"
-    @refresh="refresh"
   />
 </template>
 <script>

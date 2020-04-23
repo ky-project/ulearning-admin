@@ -40,7 +40,6 @@ router.beforeEach(async(to, from, next) => {
         // 没有权限（第一次登陆 or 刷新）
         try {
           // 获取用户信息
-          console.log('重新获取用户信息')
           const results = await Promise.all([
             store.dispatch('user/getInfo'),
             store.dispatch('user/getPermission'),
@@ -55,13 +54,11 @@ router.beforeEach(async(to, from, next) => {
               permissions.push(permissionSource)
             }
           })
-          console.log('permissions', permissions)
           // 生成路由
           store.dispatch('permission/generateRoutes', permissions)
             .then((accessRoutes) => {
               // 解决再次登录路由重复添加的问题
               resetRouter()
-              console.log(accessRoutes)
               router.addRoutes(accessRoutes)
               next({ ...to, replace: true })
             })

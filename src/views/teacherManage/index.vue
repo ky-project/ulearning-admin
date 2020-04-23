@@ -28,6 +28,7 @@
           class="filter-item"
           style="margin-left: 10px;"
           type="primary"
+          v-permission="['teacher:importExcel']"
           icon="el-icon-upload2"
         >
           批量导入
@@ -40,6 +41,7 @@
         style="margin-left: 10px;"
         type="primary"
         icon="el-icon-download"
+        v-permission="['teacher:downloadTemplate']"
         @click="handleDownloadTemplate"
       >
         下载模板
@@ -51,6 +53,7 @@
         style="margin-left: 10px;"
         type="primary"
         icon="el-icon-plus"
+        v-permission="['teacher:save']"
         @click="handleCreate"
       >
         添加
@@ -72,8 +75,8 @@
         type="index"
         align="center"
         width="50"
-        :index="indexMethod"
-      />
+        :index="indexMethod">
+      </el-table-column>
       <el-table-column label="工号" prop="teaNumber" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.teaNumber }}</span>
@@ -116,6 +119,7 @@
             type="text"
             size="mini"
             title="分配角色"
+            v-permission="['teacher:saveAssignedRole']"
             @click="showPopTransfer(row)"
           >
             <svg-icon icon-class="jiaosexiugai" />
@@ -125,6 +129,7 @@
             type="text"
             size="mini"
             title="修改"
+            v-permission="['teacher:update']"
             @click="handleUpdate(row)"
           >
             <i class="el-icon-edit" />
@@ -134,6 +139,7 @@
             size="mini"
             type="text"
             title="删除"
+            v-permission="['teacher:delete']"
             @click="handleDelete(row,$index)"
           >
             <i class="el-icon-delete" />
@@ -239,11 +245,12 @@ import { isEmail, isPhone } from '@/utils/validate'
 import PopTransfer from '@/components/PopTransfer'
 import { getTeacherPageList, updateTeacher, addTeacher, deleteTeacher, getAssignedRole, saveAssignedRole } from '@/api/teacher-manage'
 import { getRolesList } from '@/api/role-manage'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'TeacherManage',
   components: { Pagination, PopTransfer, Upload },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {

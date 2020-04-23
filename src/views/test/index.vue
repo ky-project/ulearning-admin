@@ -74,7 +74,6 @@ export default {
       }
       // debugger
       const result = this.getRoutes(root)
-      console.log(result)
     }
   },
   methods: {

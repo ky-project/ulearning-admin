@@ -18,7 +18,7 @@
       <el-button v-waves round size="small" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button class="filter-item fr" round size="small" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
+      <el-button v-permission="['role:save']" class="filter-item fr" round size="small" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         添加
       </el-button>
     </div>
@@ -62,13 +62,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" title="分配权限" type="text" size="mini" @click="showPopTransfer(row)">
+          <el-button :style="{color: '#409EFF'}" v-permission="['role:saveAssignedPermission', 'role:getAssignedPermission']" title="分配权限" type="text" size="mini" @click="showPopTransfer(row)">
             <svg-icon icon-class="jiaosexiugai" />
           </el-button>
-          <el-button :style="{color: '#409EFF'}" title="修改" type="text" size="mini" @click="handleUpdate(row)">
+          <el-button :style="{color: '#409EFF'}" v-permission="['role:update']" title="修改" type="text" size="mini" @click="handleUpdate(row)">
             <i class="el-icon-edit" />
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
+          <el-button :style="{color: '#F56C6C'}" v-permission="['role:delete']" title="删除" size="mini" type="text" @click="handleDelete(row,$index)">
             <i class="el-icon-delete" />
           </el-button>
         </template>
@@ -132,6 +132,7 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PopTransfer from '@/components/PopTransfer'
 import { getPrivilegeGroupList, getAllPrivilegeGroup } from '@/api/privilege-manage'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 import {
   getRolePageList,
   updateRole,
@@ -147,7 +148,7 @@ import {
 export default {
   name: 'RoleManage',
   components: { Pagination, PopTransfer },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     return {
       tableKey: 0,
@@ -218,11 +219,9 @@ export default {
     async showPopTransfer(row) {
       this.selectRoleId = row.id
       const response = await getAssignedPermission({ roleId: row.id })
-      console.log('response', response)
       this.chooseList = response.data.map(item => {
         return item.key
       })
-      console.log('chooseList', this.chooseList)
       this.visible = true
     },
     deleteItem(index) {

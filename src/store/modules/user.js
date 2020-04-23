@@ -55,7 +55,6 @@ const actions = {
       getPermission()
         .then(response => {
           const { data } = response
-          // console.log('permission', data)
           commit('SET_PERMISSION', data)
           resolve(data)
         })

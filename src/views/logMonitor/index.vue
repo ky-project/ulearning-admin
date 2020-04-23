@@ -32,7 +32,7 @@
       <el-button v-waves class="filter-item" size="small" type="primary" round icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button v-waves class="filter-item fr" size="small" type="primary" round icon="el-icon-download" @click="handleDownload()">
+      <el-button v-waves v-permission="['logHistory:download', 'logHistory:getVoList']" class="filter-item fr" size="small" type="primary" round icon="el-icon-download" @click="handleDownload()">
         历史日志下载
       </el-button>
     </div>
@@ -130,11 +130,12 @@
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getLogTypeList, getLogPageList, getLogHistoryList, downloadLogHistoryFile } from '@/api/log-monitor'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'LogMonitor',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     return {
       logTypeList: [],
@@ -180,7 +181,6 @@ export default {
       this.listLoading = true
       // 1. 格式化时间
       // this.listQuery.createTime = moment(this.listQuery.createTime,)
-      console.log('createTime', this.listQuery.createTime)
       getLogPageList(this.listQuery)
         .then(response => {
           const { content, total } = response.data

@@ -63,10 +63,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" title="下载" size="mini" type="text" @click="downLoadFile(row.id)">
+          <el-button :style="{color: '#409EFF'}" v-permission="['fileRecord:download']" title="下载" size="mini" type="text" @click="downLoadFile(row.id)">
             <i class="el-icon-download"/>
           </el-button>
-          <el-button :style="{color: '#F56C6C'}" title="删除" size="mini" type="text" @click="handleDelete(row.id)">
+          <el-button :style="{color: '#F56C6C'}" v-permission="['fileRecord:delete']" title="删除" size="mini" type="text" @click="handleDelete(row.id)">
             <i class="el-icon-delete" />
           </el-button>
         </template>
@@ -89,11 +89,12 @@
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import {pageListFile, deleteFile, getById} from '@/api/file-manage'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'FileManage',
   components: {Pagination},
-  directives: {waves},
+  directives: { waves, permission },
   data() {
     return {
       logTypeList: [],

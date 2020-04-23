@@ -1,7 +1,6 @@
 <template>
   <i-frame
     :src="server_monitor"
-    @refresh="refresh"
   />
 </template>
 <script>
