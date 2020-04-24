@@ -4,11 +4,11 @@
       <el-input v-model="listQuery.roleName" size="small" placeholder="角色名" style="width: 200px;" class="filter-item" />
       <el-select v-model="listQuery.isAdmin" size="small" placeholder="是否为管理员" style="width: 200px;" class="filter-item">
         <el-option
-          label="true"
+          label="是"
           :value="true"
         />
         <el-option
-          label="false"
+          label="否"
           :value="false"
         />
       </el-select>
@@ -50,9 +50,9 @@
           <span>{{ row.roleSource }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否为管理员" min-width="50" align="center">
+      <el-table-column label="管理员权限" min-width="70" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.isAdmin }}</span>
+          <span>{{ row.isAdmin ? '是' : '否' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" min-width="120" align="center">
@@ -60,7 +60,7 @@
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="80" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-permission="['role:saveAssignedPermission', 'role:getAssignedPermission']" round type="primary" size="mini" @click="showPopTransfer(row)">
             分配权限

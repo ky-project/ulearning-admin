@@ -63,62 +63,66 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="uri" align="center" min-width="50">
+      <el-table-column label="uri" align="center" min-width="250">
         <template slot-scope="{row}">
           <span>{{ row.uri }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最大并发" width="80" align="center">
+      <el-table-column label="最大并发" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.concurrentMax }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="执行中" width="70" align="center">
+      <el-table-column label="执行中" min-width="70" align="center">
         <template slot-scope="{row}">
           <span>{{ row.runningCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最慢请求" width="80" align="center">
+      <el-table-column label="最慢请求" min-width="80" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.requestTimeMillisMax }} ms</span>
+          <el-tag :type="row.requestTimeMillisMax > 500 ? (row.requestTimeMillisMax > 1000 ? 'danger' : 'warning' ): 'success'">
+            <span>{{ row.requestTimeMillisMax }} ms</span>
+          </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="平均请求时间" width="110" align="center">
+      <el-table-column label="平均请求时间" min-width="110" align="center">
         <template slot-scope="{row}">
-          <span>{{ parseInt(row.requestTimeMillis / row.requestCount) }} ms</span>
+          <el-tag :type="parseInt(row.requestTimeMillis / row.requestCount) > 200 ? (parseInt(row.requestTimeMillis / row.requestCount) > 500 ? 'danger' : 'warning' ): 'success'">
+            <span>{{ parseInt(row.requestTimeMillis / row.requestCount) }} ms</span>
+          </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="请求次数" width="80" align="center">
+      <el-table-column label="请求次数" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.requestCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="事务回滚数" width="110" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.jdbcRollbackCount }}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="事务回滚数" min-width="10" align="center">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<span>{{ row.jdbcRollbackCount }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <!--<el-table-column label="更新行数" width="60" align="center">-->
         <!--<template slot-scope="{row}">-->
           <!--<span>{{ row.jdbcUpdateCount }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column label="读取行数" width="80" align="center">
+      <el-table-column label="读取行数" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcFetchRowCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="jdbc时间" width="80" align="center">
+      <el-table-column label="jdbc时间" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcExecuteTimeMillis }} ms</span>
         </template>
       </el-table-column>
-      <el-table-column label="jdbc出错数" width="100" align="center">
+      <el-table-column label="jdbc出错数" min-width="100" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcExecuteErrorCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="jdbc执行数" width="100" align="center">
+      <el-table-column label="jdbc执行数" min-width="100" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcExecuteCount }}</span>
         </template>

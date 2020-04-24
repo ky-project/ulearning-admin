@@ -65,7 +65,7 @@
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="90" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="140" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-permission="['permission:update']" type="primary" round size="mini" @click="handleUpdate(row)">
             修改

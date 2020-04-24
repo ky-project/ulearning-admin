@@ -1,12 +1,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.logUsername" size="small" placeholder="用户账号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.logUsername" @change="handleFilter" size="small" placeholder="用户账号" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.logDescription" @change="handleFilter" size="small" placeholder="操作内容" style="width: 200px;" class="filter-item" />
       <el-select
         v-model="listQuery.logType"
         placeholder="日志类型"
         style="width: 200px;"
         class="filter-item"
+        @change="handleFilter"
         size="small"
       >
         <el-option
@@ -23,6 +25,7 @@
         placeholder="选择日期"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
+        @change="handleFilter"
         style="width: 200px;"
         size="small"
       />
@@ -59,37 +62,37 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="用户账号" align="center" width="100">
+      <el-table-column label="用户账号" align="center" min-width="100">
         <template slot-scope="{row}">
           <span>{{ row.logUsername }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作地址" min-width="30" align="center">
+      <el-table-column label="操作地址" min-width="170" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logAddress }}({{ row.logIp }})</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="20" align="center">
+      <el-table-column label="操作" min-width="140" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logDescription }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="访问接口" min-width="20" align="center">
+      <el-table-column label="访问接口" min-width="170" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logModule }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="日志类型" width="80" align="center">
+      <el-table-column label="日志类型" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.logType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作时间" width="90" align="center">
+      <el-table-column label="操作时间" min-width="90" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="耗时" width="70" align="center">
+      <el-table-column label="耗时" min-width="70" align="center">
         <template slot-scope="{row}">
           <el-tag :type="row.logTime > 500 ? (row.logTime > 1000 ? 'danger' : 'warning' ): 'success'">
             <span>{{ row.logTime }}</span>
@@ -148,7 +151,8 @@ export default {
         pageSize: 8,
         logUsername: '',
         logType: '',
-        createTime: ''
+        createTime: '',
+        logDescription: ''
       },
       dialogFormVisible: false,
       logHistoryList: [],
@@ -170,6 +174,8 @@ export default {
       this.listQuery.logUsername = ''
       this.listQuery.logType = ''
       this.listQuery.createTime = ''
+      this.listQuery.logDescription = ''
+      this.handleFilter()
     },
     updatePage(val) {
       this.listQuery.currentPage = val

@@ -80,7 +80,7 @@
           <span>{{ row.teachingTaskAlias }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="任课教师" min-width="50" align="center">
+      <el-table-column label="任课教师" min-width="60" align="center">
         <template slot-scope="{row}">
           <span>{{ row.teacher.teaName }}</span>
         </template>
@@ -95,7 +95,7 @@
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="140" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-permission="['teachingTask:update']" round type="primary" size="mini" @click="handleUpdate(row)">
             修改
