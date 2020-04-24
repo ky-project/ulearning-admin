@@ -85,8 +85,11 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]"
+               v-el-drag-dialog
+               :visible.sync="dialogFormVisible">
       <el-form
+        size="small"
         ref="dataForm"
         :rules="rules"
         :model="temp"
@@ -116,6 +119,7 @@
       </div>
     </el-dialog>
     <pop-transfer
+      v-el-drag-dialog
       v-model="chooseList"
       pop-title="分配权限"
       :list-titles="['权限池', '已选项']"
@@ -144,11 +148,12 @@ import {
 import {
   getRightsList
 } from '@/api/rights-manage'
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'RoleManage',
   components: { Pagination, PopTransfer },
-  directives: { waves, permission },
+  directives: { waves, permission, elDragDialog },
   data() {
     return {
       tableKey: 0,

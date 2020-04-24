@@ -70,11 +70,14 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]"
+               v-el-drag-dialog
+               :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
+        size="small"
         label-position="left"
         label-width="70px"
       >
@@ -113,11 +116,12 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import { isEmail, isPhone } from '@/utils/validate'
 import { getCoursePageList, updateCourse, addCourse, deleteCourse } from '@/api/course-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'CourseManage',
   components: { Pagination },
-  directives: { waves, permission },
+  directives: { waves, permission, elDragDialog },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {

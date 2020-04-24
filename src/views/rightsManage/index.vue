@@ -87,11 +87,14 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]"
+               v-el-drag-dialog
+               :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
+        size="small"
         label-position="left"
         label-width="70px"
       >
@@ -129,11 +132,12 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getAllRightsGroup, getRightsPageList, deleteRights, addRights, updateRights } from '@/api/rights-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'RightsManage',
   components: { Pagination },
-  directives: { waves, permission },
+  directives: { waves, permission, elDragDialog },
   data() {
     return {
       rightsGroup: [],

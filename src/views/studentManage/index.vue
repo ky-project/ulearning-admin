@@ -142,11 +142,14 @@
       @pagination="setPagination"
     />
     <!-- 弹窗 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog v-el-drag-dialog
+               :title="textMap[dialogStatus]"
+               :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
+        size="small"
         label-position="left"
         label-width="70px"
       >
@@ -184,6 +187,7 @@
     <!-- 提示消息 -->
     <el-dialog
       class-name="error-dialog"
+      v-el-drag-dialog
       title="提示"
       :visible.sync="dialogVisible"
       width="30%"
@@ -216,15 +220,16 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import { isEmail, isPhone } from '@/utils/validate'
 import { getStudentPageList, updateStudent, addStudent, deleteStudent } from '@/api/student-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'StudentManage',
   components: { Pagination, Upload },
-  directives: { waves, permission },
+  directives: { waves, permission, elDragDialog },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('stuPhone is required'))
+        return callback()
       } else if (!isPhone(value)) {
         return callback(new Error('手机格式有误!'))
       } else {
@@ -233,7 +238,7 @@ export default {
     }
     const checkEmail = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('stuEmail is required'))
+        return callback()
       } else if (!isEmail(value)) {
         return callback(new Error('邮箱格式有误!'))
       } else {
@@ -269,12 +274,12 @@ export default {
         create: '添加学生'
       },
       rules: {
-        stuDept: [{ required: true, message: '请输入系部', trigger: 'blur' }],
-        stuGender: [{ required: true, message: '请选择性别', trigger: 'change' }],
+        // stuDept: [{ required: true, message: '请输入系部', trigger: 'blur' }],
+        // stuGender: [{ required: true, message: '请选择性别', trigger: 'change' }],
         stuName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         stuNumber: [{ required: true, message: '请输入工号', trigger: 'blur' }],
-        stuPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
-        stuEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
+        stuPhone: [{ required: false, validator: checkPhone, trigger: 'blur' }],
+        stuEmail: [{ required: false, validator: checkEmail, trigger: 'blur' }]
       },
       dialogVisible: false, // 消息提示
       dialogTitle: '', //

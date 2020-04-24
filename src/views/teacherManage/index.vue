@@ -155,11 +155,14 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]"
+               :visible.sync="dialogFormVisible"
+               v-el-drag-dialog>
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
+        size="small"
         label-position="left"
         label-width="70px"
       >
@@ -198,6 +201,7 @@
       </div>
     </el-dialog>
     <pop-transfer
+      v-el-drag-dialog
       v-model="chooseList"
       pop-title="分配角色"
       :list-titles="['角色池', '已选项']"
@@ -208,6 +212,7 @@
     />
     <!-- 提示消息 -->
     <el-dialog
+      v-el-drag-dialog
       class-name="error-dialog"
       title="提示"
       :visible.sync="dialogVisible"
@@ -243,15 +248,16 @@ import PopTransfer from '@/components/PopTransfer'
 import { getTeacherPageList, updateTeacher, addTeacher, deleteTeacher, getAssignedRole, saveAssignedRole } from '@/api/teacher-manage'
 import { getRolesList } from '@/api/role-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   name: 'TeacherManage',
   components: { Pagination, PopTransfer, Upload },
-  directives: { waves, permission },
+  directives: { waves, permission, elDragDialog },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('teaPhone is required'))
+        return callback()
       } else if (!isPhone(value)) {
         return callback(new Error('手机格式有误!'))
       } else {
@@ -260,7 +266,7 @@ export default {
     }
     const checkEmail = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('teaEmail is required'))
+        return callback()
       } else if (!isEmail(value)) {
         return callback(new Error('邮箱格式有误!'))
       } else {
@@ -296,13 +302,13 @@ export default {
         create: '添加教师'
       },
       rules: {
-        teaDept: [{ required: true, message: '请输入系部', trigger: 'blur' }],
-        teaGender: [{ required: true, message: '请选择性别', trigger: 'change' }],
+        // teaDept: [{ required: true, message: '请输入系部', trigger: 'blur' }],
+        // teaGender: [{ required: true, message: '请选择性别', trigger: 'change' }],
         teaName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         teaNumber: [{ required: true, message: '请输入工号', trigger: 'blur' }],
-        teaTitle: [{ required: true, message: '请输入职称', trigger: 'blur' }],
-        teaPhone: [{ required: true, validator: checkPhone, trigger: 'blur' }],
-        teaEmail: [{ required: true, validator: checkEmail, trigger: 'blur' }]
+        // teaTitle: [{ required: true, message: '请输入职称', trigger: 'blur' }],
+        teaPhone: [{ required: false, validator: checkPhone, trigger: 'blur' }],
+        teaEmail: [{ required: false, validator: checkEmail, trigger: 'blur' }]
       },
       // 穿梭框参数
       visible: false,

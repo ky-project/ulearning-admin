@@ -87,6 +87,9 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+  .el-popup-parent--hidden .fixed-header {
+    padding-right: 0;
+  }
 </style>
 
 <style lang="scss">

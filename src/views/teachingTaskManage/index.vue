@@ -117,11 +117,14 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]"
+               v-el-drag-dialog
+               :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
+        size="small"
         label-position="left"
         label-width="70px"
       >
@@ -192,6 +195,7 @@ import { getTaskPageList, updateTask, addTask, deleteTask, getTermList } from '@
 import { getAllCourse } from '@/api/course-manage'
 import { getAllTeacher } from '@/api/teacher-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
+import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
   /*  {
@@ -214,7 +218,7 @@ export default {
 			} */
   name: 'TeachingTaskManage',
   components: { Pagination },
-  directives: { waves, permission },
+  directives: { waves, permission, elDragDialog },
   filters: {
     /* statusFilter(status) {
       const statusMap = {
