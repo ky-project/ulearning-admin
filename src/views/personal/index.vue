@@ -2,10 +2,10 @@
   <div class="app-container">
     <div>
       <el-row :gutter="20">
-        <el-col :span="6" :xs="24">
+        <el-col :span="8" :xs="24">
           <user-card />
         </el-col>
-        <el-col :span="18" :xs="24">
+        <el-col :span="16" :xs="24">
           <el-card>
             <div slot="header" class="clearfix">
               <span>修改密码</span>
