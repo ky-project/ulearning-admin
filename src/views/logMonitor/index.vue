@@ -95,7 +95,7 @@
       <el-table-column label="耗时" min-width="70" align="center">
         <template slot-scope="{row}">
           <el-tag :type="row.logTime > 500 ? (row.logTime > 1000 ? 'danger' : 'warning' ): 'success'">
-            <span>{{ row.logTime }}</span>
+            <span>{{ row.logTime }} ms</span>
           </el-tag>
         </template>
       </el-table-column>

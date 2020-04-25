@@ -197,7 +197,7 @@ export default {
   $light_gray: #eee;
 
   .login-container {
-    background: url(../../assets/images/admin.png) 50% no-repeat;
+    background: url(../../assets/images/admin_background.png) 50% no-repeat;
     background-size: cover;
     width: 100%;
     height: 100vh;
