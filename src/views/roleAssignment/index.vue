@@ -14,110 +14,20 @@
         添加
       </el-button>
     </div>
-
-    <!-- <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <el-table-column label="角色名" align="center" width="120">
-        <template slot-scope="{row}">
-          <span>{{ row.roleName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="角色资源" min-width="120" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.roleSource }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否为管理员" min-width="50" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.isAdmin }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" min-width="120" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" min-width="70" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button :style="{color: '#409EFF'}" type="text" size="mini" @click="handleUpdate(row)">
-            <i class="el-icon-edit" />
-          </el-button>
-          <el-button :style="{color: '#F56C6C'}" size="mini" type="text" @click="handleDelete(row,$index)">
-            <i class="el-icon-delete" />
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
-
-    <!-- <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.currentPage"
-      :limit.sync="listQuery.pageSize"
-      class="fr"
-      @pagination="setPagination"
-    /> -->
-
-    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="70px"
-      >
-        <el-form-item label="角色名" prop="roleName">
-          <el-input v-model="temp.roleName" />
-        </el-form-item>
-        <el-form-item label="角色资源" prop="roleSource">
-          <el-input v-model="temp.roleSource" />
-        </el-form-item>
-        <el-form-item label="管理员" prop="isAdmin">
-          <el-select v-model="temp.isAdmin" class="filter-item">
-            <el-option label="是" :value="true" />
-            <el-option label="否" :value="false" />
-          </el-select>
-        </el-form-item>
-        <allocate
-          :current-list="assignedPrivilege"
-          :pool-list="restPrivilege"
-          value-name="permissionName"
-          current-title="已分配权限"
-          pool-title="权限池"
-          @addItem="addItem"
-          @deleteItem="deleteItem"
-        />
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确定
-        </el-button>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves' // waves directive
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import Allocate from '@/components/Allocate'
+// import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+// import Allocate from '@/components/Allocate'
 // import { isEmpty } from '@/utils'
 import { getPrivilegeGroupList, getAllPrivilegeGroup } from '@/api/privilege-manage'
 import { getRolePageList, updateRole, addRole, deleteRole, getAssignedPermission, saveAssignedPermission } from '@/api/role-manage'
 
 export default {
   name: 'RoleAssignment',
-  components: { Pagination, Allocate },
+  // components: { Pagination, Allocate },
   directives: { waves },
   data() {
     return {
@@ -182,37 +92,6 @@ export default {
       })
       return result
     },
-    /* // 获取剩余权限组
-    getRestPrivilege() {
-      this.privilegeGroup.forEach(groupName => {
-        let tempArr = []
-        const allItems = this.allPrivilege[groupName]
-        // 如果没有对应的权限组
-        if (!this.assignedPrivilege[groupName]) {
-          // 直接进行深拷贝
-          tempArr = JSON.parse(JSON.stringify(allItems))
-        } else {
-          // 否则
-          const assignedItems = this.assignedPrivilege[groupName]
-          for (let i = 0; i < allItems.length; i++) {
-            let flag = true
-            const allItem = allItems[i]
-            for (let j = 0; j < assignedItems.length; j++) {
-              const assignedItem = assignedItems[j]
-              if (allItem.id === assignedItem.id) {
-                flag = false // 存在flag = false
-                break
-              }
-            }
-            // 如果不存在，添加
-            if (flag) {
-              tempArr.push(allItem)
-            }
-          }
-        }
-        this.restPrivilege[groupName] = tempArr
-      })
-    }, */
     // 获取所有权限组
     getAllPrivilegeGroup() {
       getAllPrivilegeGroup()

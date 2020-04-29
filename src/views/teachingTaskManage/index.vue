@@ -6,7 +6,7 @@
         placeholder="课程名"
         style="width: 200px;"
         class="filter-item"
-         size="small"
+        size="small"
       >
         <el-option
           v-for="item in courseList"
@@ -68,8 +68,8 @@
         type="index"
         align="center"
         :index="indexMethod"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="课程名" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.course.courseName }}</span>
@@ -117,9 +117,11 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]"
-               v-el-drag-dialog
-               :visible.sync="dialogFormVisible">
+    <el-dialog
+      v-el-drag-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -190,7 +192,7 @@
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { isEmail, isPhone } from '@/utils/validate'
+// import { isEmail, isPhone } from '@/utils/validate'
 import { getTaskPageList, updateTask, addTask, deleteTask, getTermList } from '@/api/teaching-task-manage'
 import { getAllCourse } from '@/api/course-manage'
 import { getAllTeacher } from '@/api/teacher-manage'
@@ -198,39 +200,12 @@ import permission from '@/directive/permission/index.js' // 权限判断指令
 import elDragDialog from '@/directive/el-drag-dialog'
 
 export default {
-  /*  {
-				"course": {
-					"courseCredit": 0,
-					"courseName": "",
-					"courseNumber": "",
-					"id": 0,
-				},
-				"courseId": 0,
-				"id": 0,
-				"teaId": 0,
-				"teacher": {
-					"id": 0,
-					"teaName": "",
-				},
-				"teachingTaskAlias": "",
-        "term": "",
-        "createTime": ""
-			} */
+
   name: 'TeachingTaskManage',
   components: { Pagination },
   directives: { waves, permission, elDragDialog },
   filters: {
-    /* statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    } */
+
   },
   data() {
     return {

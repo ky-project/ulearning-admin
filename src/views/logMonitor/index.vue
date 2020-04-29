@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.logUsername" @change="handleFilter" size="small" placeholder="用户账号" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.logDescription" @change="handleFilter" size="small" placeholder="操作内容" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.logUsername" size="small" placeholder="用户账号" style="width: 200px;" class="filter-item" @change="handleFilter" />
+      <el-input v-model="listQuery.logDescription" size="small" placeholder="操作内容" style="width: 200px;" class="filter-item" @change="handleFilter" />
       <el-select
         v-model="listQuery.logType"
         placeholder="日志类型"
         style="width: 200px;"
         class="filter-item"
-        @change="handleFilter"
         size="small"
+        @change="handleFilter"
       >
         <el-option
           v-for="item in logTypeList"
@@ -25,9 +25,9 @@
         placeholder="选择日期"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        @change="handleFilter"
         style="width: 200px;"
         size="small"
+        @change="handleFilter"
       />
       <el-button v-waves class="filter-item" size="small" type="primary" round @click="handleReset">
         重置
@@ -111,12 +111,14 @@
       @pagination="setPagination"
     />
 
-    <el-dialog title="历史日志"
-               :visible.sync="dialogFormVisible"
-               width="30%">
-        <el-radio-group v-model="logHistoryId">
-          <el-radio v-for="item in logHistoryList" :key="item.id" :label="item.id">{{item.logHistoryDate}}</el-radio>
-        </el-radio-group>
+    <el-dialog
+      title="历史日志"
+      :visible.sync="dialogFormVisible"
+      width="30%"
+    >
+      <el-radio-group v-model="logHistoryId">
+        <el-radio v-for="item in logHistoryList" :key="item.id" :label="item.id">{{ item.logHistoryDate }}</el-radio>
+      </el-radio-group>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
@@ -132,7 +134,7 @@
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getLogTypeList, getLogPageList, getLogHistoryList, downloadLogHistoryFile } from '@/api/log-monitor'
+import { getLogTypeList, getLogPageList, getLogHistoryList } from '@/api/log-monitor'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
@@ -207,7 +209,7 @@ export default {
       this.dialogFormVisible = true
       getLogHistoryList()
         .then(response => {
-          this.logHistoryList = response.data;
+          this.logHistoryList = response.data
         })
     },
     downLoadLogFile() {

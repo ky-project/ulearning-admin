@@ -1,15 +1,32 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.recordSizeTmp" size="small" placeholder="文件大小(MB) 大于等于" style="width: 200px;"
-                class="filter-item"/>
-      <el-input v-model="listQuery.recordTable" size="small" placeholder="文件记录所属表" style="width: 200px;"
-                class="filter-item"/>
+      <el-input
+        v-model="listQuery.recordSizeTmp"
+        size="small"
+        placeholder="文件大小(MB) 大于等于"
+        style="width: 200px;"
+        class="filter-item"
+      />
+      <el-input
+        v-model="listQuery.recordTable"
+        size="small"
+        placeholder="文件记录所属表"
+        style="width: 200px;"
+        class="filter-item"
+      />
       <el-button v-waves class="filter-item" size="small" type="primary" round @click="handleReset">
         重置
       </el-button>
-      <el-button v-waves class="filter-item" size="small" type="primary" round icon="el-icon-search"
-                 @click="handleFilter">
+      <el-button
+        v-waves
+        class="filter-item"
+        size="small"
+        type="primary"
+        round
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         查询
       </el-button>
     </div>
@@ -29,8 +46,8 @@
         type="index"
         align="center"
         :index="indexMethod"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="文件名" align="center" min-width="120">
         <template slot-scope="{row}">
           <span>{{ row.recordName }}</span>
@@ -62,7 +79,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="140" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <el-button v-permission="['fileRecord:download']" round size="mini" type="info" @click="downLoadFile(row.id)">
             下载
           </el-button>
@@ -88,12 +105,12 @@
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import {pageListFile, deleteFile, getById} from '@/api/file-manage'
+import { pageListFile, deleteFile } from '@/api/file-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 
 export default {
   name: 'FileManage',
-  components: {Pagination},
+  components: { Pagination },
   directives: { waves, permission },
   data() {
     return {
@@ -130,11 +147,11 @@ export default {
     getList() {
       this.listLoading = true
       if (this.listQuery.recordSizeTmp) {
-        this.listQuery.recordSize = Math.round(this.listQuery.recordSizeTmp * 1024 * 1024);
+        this.listQuery.recordSize = Math.round(this.listQuery.recordSizeTmp * 1024 * 1024)
       }
       pageListFile(this.listQuery)
         .then(response => {
-          const {content, total} = response.data
+          const { content, total } = response.data
           this.list = content
           this.total = total
           this.listLoading = false
@@ -150,7 +167,7 @@ export default {
     downLoadFile(id) {
       window.location.href = process.env.VUE_APP_BASE_API + `/monitor-manage/fileRecord/download?id=${id}`
     },
-    handleDelete(id){
+    handleDelete(id) {
       this.$confirm('确定永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

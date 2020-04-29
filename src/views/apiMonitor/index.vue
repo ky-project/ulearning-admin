@@ -16,8 +16,15 @@
           :value="item.key"
         />
       </el-select>
-      <el-button v-waves class="filter-item" size="small" type="primary" round icon="el-icon-search"
-                 @click="handleFilter">
+      <el-button
+        v-waves
+        class="filter-item"
+        size="small"
+        type="primary"
+        round
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
         查询
       </el-button>
     </div>
@@ -97,16 +104,6 @@
           <span>{{ row.requestCount }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column label="事务回滚数" min-width="10" align="center">-->
-        <!--<template slot-scope="{row}">-->
-          <!--<span>{{ row.jdbcRollbackCount }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="更新行数" width="60" align="center">-->
-        <!--<template slot-scope="{row}">-->
-          <!--<span>{{ row.jdbcUpdateCount }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column label="读取行数" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.jdbcFetchRowCount }}</span>
@@ -127,11 +124,6 @@
           <span>{{ row.jdbcExecuteCount }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column label="事务提交数" width="70" align="center">-->
-        <!--<template slot-scope="{row}">-->
-          <!--<span>{{ row.jdbcCommitCount }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
     </el-table>
 
   </div>
@@ -139,11 +131,11 @@
 
 <script>
 import waves from '@/directive/waves' // waves directive
-import {getApiStatList, getSystemModules} from '@/api/api-monitor'
+import { getApiStatList, getSystemModules } from '@/api/api-monitor'
 
 export default {
   name: 'ApiMonitor',
-  directives: {waves},
+  directives: { waves },
   data() {
     return {
       systemModuleList: [],
@@ -160,7 +152,7 @@ export default {
   },
   methods: {
     async getSystemModules() {
-      const response =  await getSystemModules()
+      const response = await getSystemModules()
       this.systemModuleList = response.data
       this.listQuery.module = this.systemModuleList[0].key
       this.getList()
@@ -170,7 +162,7 @@ export default {
       // 1. 格式化时间
       getApiStatList(this.listQuery)
         .then(response => {
-          let data = response.data
+          const data = response.data
           this.list = data
           this.listLoading = false
         })

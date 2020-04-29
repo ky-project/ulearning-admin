@@ -26,8 +26,8 @@
         type="index"
         align="center"
         :index="indexMethod"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="课程号" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.courseNumber }}</span>
@@ -70,9 +70,11 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]"
-               v-el-drag-dialog
-               :visible.sync="dialogFormVisible">
+    <el-dialog
+      v-el-drag-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -113,7 +115,7 @@
 <script>
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { isEmail, isPhone } from '@/utils/validate'
+// import { isEmail, isPhone } from '@/utils/validate'
 import { getCoursePageList, updateCourse, addCourse, deleteCourse } from '@/api/course-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -123,13 +125,13 @@ export default {
   components: { Pagination },
   directives: { waves, permission, elDragDialog },
   data() {
-    const checkPhone = (rule, value, callback) => {
+    /* const checkPhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('teaPhone is required'))
       } else if (!isPhone(value)) {
         return callback(new Error('手机格式有误!'))
       } else {
-        return callback()
+        return callback()ß
       }
     }
     const checkEmail = (rule, value, callback) => {
@@ -140,7 +142,7 @@ export default {
       } else {
         return callback()
       }
-    }
+    } */
     return {
       tableKey: 0,
       list: null,
@@ -175,24 +177,6 @@ export default {
       downloadLoading: false */
     }
   },
-  /* computed: {
-    page: {
-      get() {
-        return this.listQuery.currentPage
-      },
-      set(val) {
-        this.listQuery.currentPage = val
-      }
-    },
-    limit: {
-      get() {
-        return this.listQuery.pageSize
-      },
-      set(val) {
-        this.listQuery.pageSize = val
-      }
-    }
-  }, */
   created() {
     this.getList()
   },
@@ -214,35 +198,13 @@ export default {
         })
     },
     setPagination(currentPage, pageSize) {
-      // this.listQuery.currentPage = currentPage
-      // this.listQuery.pageSize = pageSize
       this.getList()
     },
     handleFilter() {
       this.listQuery.currentPage = 1
       this.getList()
     },
-    /* handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },*/
+
     resetTemp() {
       this.temp = {
         'id': '',
@@ -323,39 +285,6 @@ export default {
     indexMethod(index) {
       return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
     }
-    /* handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
-    getSortClass: function(key) {
-      const sort = this.listQuery.sort
-      return sort === `+${key}` ? 'ascending' : 'descending'
-    } */
   }
 }
 </script>

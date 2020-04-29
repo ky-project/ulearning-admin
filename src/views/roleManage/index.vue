@@ -85,12 +85,14 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]"
-               v-el-drag-dialog
-               :visible.sync="dialogFormVisible">
+    <el-dialog
+      v-el-drag-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
-        size="small"
         ref="dataForm"
+        size="small"
         :rules="rules"
         :model="temp"
         label-position="left"
@@ -119,8 +121,8 @@
       </div>
     </el-dialog>
     <pop-transfer
-      v-el-drag-dialog
       v-model="chooseList"
+      v-el-drag-dialog
       pop-title="分配权限"
       :list-titles="['权限池', '已选项']"
       :data="rightsList"
@@ -256,11 +258,6 @@ export default {
           // this.rightsList = this.filterRouteRights(response.data)
         })
     },
-    // 筛选页面权限
-    /*  filterRouteRights(rightList) {
-      console.log('rightList', rightList)
-      return rightList.filter(right => right.permissionSource.split(':')[1] === 'manage')
-    }, */
     // 获取所有权限组
     getAllPrivilegeGroup() {
       getAllPrivilegeGroup()

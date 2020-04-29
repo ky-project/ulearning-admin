@@ -21,40 +21,39 @@
         file-key="file"
         class-name="fr"
         :on-success="uploadSuccess"
-        :on-error="uploadError"
       >
         <el-button
+          v-permission="['student:importExcel']"
           size="small"
           round
           class="filter-item"
           style="margin-left: 10px;"
           type="success"
-          v-permission="['student:importExcel']"
           icon="el-icon-upload2"
         >
           批量导入
         </el-button>
       </Upload>
       <el-button
+        v-permission="['student:downloadTemplate']"
         size="small"
         round
         class="filter-item fr pan-btn green-btn"
         style="margin-left: 10px;"
         type="info"
         icon="el-icon-download"
-        v-permission="['student:downloadTemplate']"
         @click="handleDownloadTemplate"
       >
         下载模板
       </el-button>
       <el-button
+        v-permission="['student:save']"
         size="small"
         round
         class="filter-item fr"
         style="margin-left: 10px;"
         type="success"
         icon="el-icon-plus"
-        v-permission="['student:save']"
         @click="handleCreate"
       >
         添加
@@ -111,19 +110,19 @@
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
+            v-permission="['student:update']"
             type="primary"
             size="mini"
             round
-            v-permission="['student:update']"
             @click="handleUpdate(row)"
           >
             修改
           </el-button>
           <el-button
+            v-permission="['student:delete']"
             size="mini"
             type="danger"
             round
-            v-permission="['student:delete']"
             @click="handleDelete(row,$index)"
           >
             删除
@@ -142,9 +141,11 @@
       @pagination="setPagination"
     />
     <!-- 弹窗 -->
-    <el-dialog v-el-drag-dialog
-               :title="textMap[dialogStatus]"
-               :visible.sync="dialogFormVisible">
+    <el-dialog
+      v-el-drag-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -186,8 +187,8 @@
     </el-dialog>
     <!-- 提示消息 -->
     <el-dialog
-      class-name="error-dialog"
       v-el-drag-dialog
+      class-name="error-dialog"
       title="提示"
       :visible.sync="dialogVisible"
       width="30%"
@@ -304,9 +305,6 @@ export default {
       } else {
         this.$message.success('导入成功')
       }
-    },
-    uploadError(error) {
-      // this.$message.error(error.message || '出错')
     },
     updatePage(val) {
       this.listQuery.currentPage = val

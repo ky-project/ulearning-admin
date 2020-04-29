@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select
-        size="small"
         v-model="listQuery.permissionGroup"
+        size="small"
         style="width: 200px"
         class="filter-item"
         placeholder="权限组"
@@ -11,7 +11,7 @@
       >
         <el-option v-for="item in rightsGroup" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-input size="small" v-model="listQuery.permissionName" class="filter-item" style="width: 200px" placeholder="权限名" />
+      <el-input v-model="listQuery.permissionName" size="small" class="filter-item" style="width: 200px" placeholder="权限名" />
       <el-button v-waves round size="small" class="filter-item" type="primary" @click="handleReset">
         重置
       </el-button>
@@ -38,8 +38,8 @@
         type="index"
         align="center"
         :index="indexMethod"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
       <el-table-column label="权限组" align="center" min-width="100">
         <template slot-scope="{row}">
           <span>{{ row.permissionGroup }}</span>
@@ -87,9 +87,11 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]"
-               v-el-drag-dialog
-               :visible.sync="dialogFormVisible">
+    <el-dialog
+      v-el-drag-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         ref="dataForm"
         :rules="rules"

@@ -20,40 +20,39 @@
         file-key="file"
         class-name="fr"
         :on-success="uploadSuccess"
-        :on-error="uploadError"
       >
         <el-button
+          v-permission="['teacher:importExcel']"
           size="small"
           round
           class="filter-item"
           style="margin-left: 10px;"
           type="success"
-          v-permission="['teacher:importExcel']"
           icon="el-icon-upload2"
         >
           批量导入
         </el-button>
       </Upload>
       <el-button
+        v-permission="['teacher:downloadTemplate']"
         size="small"
         round
         class="filter-item fr"
         style="margin-left: 10px;"
         type="info"
         icon="el-icon-download"
-        v-permission="['teacher:downloadTemplate']"
         @click="handleDownloadTemplate"
       >
         下载模板
       </el-button>
       <el-button
+        v-permission="['teacher:save']"
         round
         size="small"
         class="filter-item fr"
         style="margin-left: 10px;"
         type="success"
         icon="el-icon-plus"
-        v-permission="['teacher:save']"
         @click="handleCreate"
       >
         添加
@@ -75,8 +74,8 @@
         type="index"
         align="center"
         width="50"
-        :index="indexMethod">
-      </el-table-column>
+        :index="indexMethod"
+      />
       <el-table-column label="工号" prop="teaNumber" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.teaNumber }}</span>
@@ -115,28 +114,28 @@
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
+            v-permission="['teacher:saveAssignedRole']"
             type="primary"
             size="mini"
             round
-            v-permission="['teacher:saveAssignedRole']"
             @click="showPopTransfer(row)"
           >
             分配角色
           </el-button>
           <el-button
+            v-permission="['teacher:update']"
             type="primary"
             size="mini"
             round
-            v-permission="['teacher:update']"
             @click="handleUpdate(row)"
           >
             修改
           </el-button>
           <el-button
+            v-permission="['teacher:delete']"
             size="mini"
             type="danger"
             round
-            v-permission="['teacher:delete']"
             @click="handleDelete(row,$index)"
           >
             删除
@@ -155,9 +154,11 @@
       @pagination="setPagination"
     />
 
-    <el-dialog :title="textMap[dialogStatus]"
-               :visible.sync="dialogFormVisible"
-               v-el-drag-dialog>
+    <el-dialog
+      v-el-drag-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -201,8 +202,8 @@
       </div>
     </el-dialog>
     <pop-transfer
-      v-el-drag-dialog
       v-model="chooseList"
+      v-el-drag-dialog
       pop-title="分配角色"
       :list-titles="['角色池', '已选项']"
       :data="rolesList"
@@ -339,9 +340,6 @@ export default {
       } else {
         this.$message.success('导入成功')
       }
-    },
-    uploadError(error) {
-      // this.$message.error(error.message || '出错')
     },
     // 下载教师模板
     handleDownloadTemplate() {

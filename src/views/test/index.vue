@@ -73,7 +73,7 @@ export default {
         children: [...this.data]
       }
       // debugger
-      const result = this.getRoutes(root)
+      this.getRoutes(root)
     }
   },
   methods: {

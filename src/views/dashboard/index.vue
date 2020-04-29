@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard__card welcome">
-            <svg-icon icon-class="yonghu" class-name="icon"/>
+            <svg-icon icon-class="yonghu" class-name="icon" />
             <div class="content">
               <p>{{ greet }}, {{ userInfo.teaName }}</p>
               <p :style="{paddingTop: '10px', fontSize: '15px'}">
@@ -15,7 +15,7 @@
         </el-col>
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard__card visited">
-            <svg-icon icon-class="tongji" class-name="icon"/>
+            <svg-icon icon-class="tongji" class-name="icon" />
             <div class="content">
               <p>今日访问</p>
               <p><span>{{ visitor }}</span>人</p>
@@ -24,7 +24,7 @@
         </el-col>
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard__card document">
-            <svg-icon icon-class="wendang" class-name="icon"/>
+            <svg-icon icon-class="wendang" class-name="icon" />
             <div class="content">
               <p>文件系统</p>
               <p><span>{{ fileSize }}</span>MB</p>
@@ -36,37 +36,39 @@
         <el-col :xs="24" :sm="18">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="caozuojilu" class-name="icon"/>操作记录</span>
+              <span><svg-icon icon-class="caozuojilu" class-name="icon" />操作记录</span>
               <el-button
                 class="refresh_button"
                 type="text"
                 size="mini"
                 :loading="chartsLoad"
-                @click="initOperationCharts">
-                <svg-icon icon-class="shuaxin"/>
+                @click="initOperationCharts"
+              >
+                <svg-icon icon-class="shuaxin" />
               </el-button>
             </div>
-            <div id="visit-count-chart" style="width: 100%;height: 400px"/>
+            <div id="visit-count-chart" style="width: 100%;height: 400px" />
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="6">
           <el-card class="dashboard__card">
             <div slot="header" class="clearfix">
-              <span><svg-icon icon-class="caozuorizhi" class-name="icon"/>操作日志</span>
+              <span><svg-icon icon-class="caozuorizhi" class-name="icon" />操作日志</span>
               <el-button
                 class="refresh_button"
                 type="text"
                 size="mini"
                 :loading="operationListLoad"
-                @click="getOperationList">
-                <svg-icon icon-class="shuaxin"/>
+                @click="getOperationList"
+              >
+                <svg-icon icon-class="shuaxin" />
               </el-button>
             </div>
             <!--<operate-table height="400px" />-->
             <el-scrollbar style="width:100%; height: 400px">
               <ul class="operation">
-                <li v-for="item in list">
-                  <span><svg-icon icon-class="yuanquan" class-name="icon"/>    {{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;IP:{{ item.logIp }}</span>
+                <li v-for="(item,index) in list" :key="index">
+                  <span><svg-icon icon-class="yuanquan" class-name="icon" />    {{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;IP:{{ item.logIp }}</span>
                   <p>
                     {{ item.logUsername }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.logDescription }}
                   </p>
@@ -81,16 +83,16 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import echarts from 'echarts'
 import resize from '@/components/Charts/mixins/resize'
-import OperateTable from './components/OperateTable'
-import {getSumFileSize} from '@/api/file-manage'
-import {getDaysOperation, getLogTop, getTodayTraffic} from '@/api/log-monitor'
+// import OperateTable from './components/OperateTable'
+import { getSumFileSize } from '@/api/file-manage'
+import { getDaysOperation, getLogTop, getTodayTraffic } from '@/api/log-monitor'
 
 export default {
   name: 'Dashboard',
-  components: {OperateTable},
+  // components: { OperateTable },
   mixins: [resize],
   data() {
     return {
@@ -135,13 +137,13 @@ export default {
   watch: {},
   created() {
     // 1. 加载表格
-    this.initOperationCharts();
+    this.initOperationCharts()
     // 2. 加载操作记录
-    this.getOperationList();
+    this.getOperationList()
     // 3. 获取文件总量
-    this.getSumFileSize();
+    this.getSumFileSize()
     // 4. 获当天访问量
-    this.getTodayTraffic();
+    this.getTodayTraffic()
   },
 
   beforeMount() {
@@ -160,12 +162,12 @@ export default {
     getTodayTraffic() {
       getTodayTraffic()
         .then(response => {
-          this.visitor = response.data.number;
+          this.visitor = response.data.number
         })
     },
     initOperationCharts() {
-      this.chartsLoad = true;
-      getDaysOperation({days: this.daysTraffic})
+      this.chartsLoad = true
+      getDaysOperation({ days: this.daysTraffic })
         .then(response => {
           const operationData = response.data
           this.totalOperation = operationData.totalOperation.map(item => parseInt(item.number))
@@ -173,17 +175,17 @@ export default {
           this.date = operationData.totalOperation.map(item => {
             return item.date.split('-')[1] + '-' + item.date.split('-')[2]
           })
-          this.initEcharts();
+          this.initEcharts()
         })
-      this.chartsLoad = false;
+      this.chartsLoad = false
     },
     getOperationList() {
-      this.operationListLoad = true;
-      getLogTop({topNumber: 15})
+      this.operationListLoad = true
+      getLogTop({ topNumber: 15 })
         .then(response => {
           this.list = response.data
         })
-      this.operationListLoad = false;
+      this.operationListLoad = false
     },
     initEcharts() {
       this.chart = echarts.init(document.getElementById('visit-count-chart'))
@@ -214,7 +216,7 @@ export default {
         },
         toolbox: {
           feature: {
-            dataView: {show: false, readOnly: false}
+            dataView: { show: false, readOnly: false }
           }
         },
         xAxis: {
@@ -269,10 +271,10 @@ export default {
                   offset: 0,
                   color: 'rgba(0, 143, 251, 0.8)'
                 },
-                  {
-                    offset: 1,
-                    color: '#fff'
-                  }
+                {
+                  offset: 1,
+                  color: '#fff'
+                }
                 ],
                 globalCoord: false
               }
@@ -295,10 +297,10 @@ export default {
                   offset: 0,
                   color: 'rgba(82, 222, 151, 0.8)'
                 },
-                  {
-                    offset: 1,
-                    color: '#fff'
-                  }
+                {
+                  offset: 1,
+                  color: '#fff'
+                }
                 ],
                 globalCoord: false
               }
