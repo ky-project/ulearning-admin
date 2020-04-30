@@ -245,12 +245,43 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
     this.getTeacherList()
     this.getTermList()
     this.getCourseList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          courseId: filter.courseId,
+          teaId: filter.teaId,
+          term: filter.term
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          courseId: this.listQuery.courseId,
+          teaId: this.listQuery.teaId,
+          term: this.listQuery.term
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     handleReset() {
       this.listQuery.courseId = ''
       this.listQuery.teaId = ''
@@ -281,6 +312,7 @@ export default {
       this.listQuery.pageSize = val
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       getTaskPageList(this.listQuery)
         .then(response => {

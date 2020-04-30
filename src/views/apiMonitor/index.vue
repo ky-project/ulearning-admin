@@ -7,7 +7,7 @@
         style="width: 200px;"
         class="filter-item"
         size="small"
-        @change="handleFilter"
+        @change="(module) => {listQuery.module = module}"
       >
         <el-option
           v-for="item in systemModuleList"
@@ -155,9 +155,37 @@ export default {
       const response = await getSystemModules()
       this.systemModuleList = response.data
       this.listQuery.module = this.systemModuleList[0].key
+      this.getPagePars()
       this.getList()
     },
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          module: filter.module
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          module: this.listQuery.module
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       // 1. 格式化时间
       getApiStatList(this.listQuery)

@@ -5,6 +5,7 @@ import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
 import permission from './modules/permission'
+import pagePars from './modules/pagePars'
 import VuexPersistence from 'vuex-persist' // 持久化存储
 
 Vue.use(Vuex)
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
     app,
     settings,
     user,
-    permission
+    permission,
+    pagePars
   },
   getters,
   plugins: [vuexLocal.plugin]

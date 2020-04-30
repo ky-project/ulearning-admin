@@ -125,24 +125,6 @@ export default {
   components: { Pagination },
   directives: { waves, permission, elDragDialog },
   data() {
-    /* const checkPhone = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('teaPhone is required'))
-      } else if (!isPhone(value)) {
-        return callback(new Error('手机格式有误!'))
-      } else {
-        return callback()ß
-      }
-    }
-    const checkEmail = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('teaEmail is required'))
-      } else if (!isEmail(value)) {
-        return callback(new Error('邮箱格式有误!'))
-      } else {
-        return callback()
-      }
-    } */
     return {
       tableKey: 0,
       list: null,
@@ -172,15 +154,41 @@ export default {
         courseNumber: [{ required: true, message: '请输入课程号', trigger: 'blur' }],
         courseCredit: [{ required: true, message: '请输入学分', trigger: 'blur' }]
       }
-      /* dialogPvVisible: false,
-      pvData: [],
-      downloadLoading: false */
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          courseName: filter.courseName,
+          courseNumber: filter.courseNumber
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          courseName: this.listQuery.courseName,
+          courseNumber: this.listQuery.courseNumber
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     updatePage(val) {
       this.listQuery.currentPage = val
     },
@@ -188,6 +196,7 @@ export default {
       this.listQuery.pageSize = val
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       getCoursePageList(this.listQuery)
         .then(response => {

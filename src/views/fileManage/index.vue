@@ -130,9 +130,40 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          recordSizeTmp: filter.recordSizeTmp,
+          recordSize: filter.recordSize,
+          recordTable: filter.recordTable
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          recordSizeTmp: this.listQuery.recordSizeTmp,
+          recordSize: this.listQuery.recordSize,
+          recordTable: this.listQuery.recordTable
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     handleReset() {
       this.listQuery.recordTable = ''
       this.listQuery.recordSize = ''
@@ -145,6 +176,7 @@ export default {
       this.listQuery.pageSize = val
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       if (this.listQuery.recordSizeTmp) {
         this.listQuery.recordSize = Math.round(this.listQuery.recordSizeTmp * 1024 * 1024)

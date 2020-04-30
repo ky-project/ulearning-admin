@@ -9,7 +9,7 @@
         style="width: 200px;"
         class="filter-item"
         size="small"
-        @change="handleFilter"
+        @change="(logType) => {listQuery.logType = logType}"
       >
         <el-option
           v-for="item in logTypeList"
@@ -27,7 +27,7 @@
         value-format="yyyy-MM-dd"
         style="width: 200px;"
         size="small"
-        @change="handleFilter"
+        @change="(createTime) => {listQuery.createTime = createTime}"
       />
       <el-button v-waves class="filter-item" size="small" type="primary" round @click="handleReset">
         重置
@@ -162,10 +162,43 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
     this.getLogTypeList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          logUsername: filter.logUsername,
+          logType: filter.logType,
+          createTime: filter.createTime,
+          logDescription: filter.logDescription
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          logUsername: this.listQuery.logUsername,
+          logType: this.listQuery.logType,
+          createTime: this.listQuery.createTime,
+          logDescription: this.listQuery.logDescription
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     getLogTypeList() {
       getLogTypeList()
         .then(response => {
@@ -186,6 +219,7 @@ export default {
       this.listQuery.pageSize = val
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       // 1. 格式化时间
       // this.listQuery.createTime = moment(this.listQuery.createTime,)

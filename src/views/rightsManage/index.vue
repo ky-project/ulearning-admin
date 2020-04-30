@@ -7,7 +7,7 @@
         style="width: 200px"
         class="filter-item"
         placeholder="权限组"
-        @change="handleFilter"
+        @change="(permissionGroup) => {listQuery.permissionGroup = permissionGroup}"
       >
         <el-option v-for="item in rightsGroup" :key="item" :label="item" :value="item" />
       </el-select>
@@ -175,10 +175,39 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
     this.getAllRightsGroup()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          permissionGroup: filter.permissionGroup,
+          permissionName: filter.permissionName
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          permissionGroup: this.listQuery.permissionGroup,
+          permissionName: this.listQuery.permissionName
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     handleReset() {
       this.listQuery.courseId = ''
       this.listQuery.permissionGroup = ''
@@ -205,6 +234,7 @@ export default {
         })
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       const { listQuery } = this
       getRightsPageList(listQuery)

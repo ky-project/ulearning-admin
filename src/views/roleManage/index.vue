@@ -197,12 +197,41 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
     this.getAllPrivilege()
     this.getAllPrivilegeGroup()
     this.getRightsList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          isAdmin: filter.isAdmin,
+          roleName: filter.roleName
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          isAdmin: this.listQuery.isAdmin,
+          roleName: this.listQuery.roleName
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     close() {
       this.visible = false
     },
@@ -300,6 +329,7 @@ export default {
       this.listQuery.pageSize = val
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       getRolePageList(this.listQuery)
         .then(response => {
@@ -310,8 +340,6 @@ export default {
         })
     },
     setPagination(currentPage, pageSize) {
-      // this.listQuery.currentPage = currentPage
-      // this.listQuery.pageSize = pageSize
       this.getList()
     },
     handleFilter() {

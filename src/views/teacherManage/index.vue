@@ -322,10 +322,41 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
     this.getRolesList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          teaName: filter.teaName,
+          teaNumber: filter.teaNumber,
+          teaDept: filter.teaDept
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          teaName: this.listQuery.teaName,
+          teaNumber: this.listQuery.teaNumber,
+          teaDept: this.listQuery.teaDept
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     uploadSuccess(response) {
       const { message, data } = response.data
       if (message && data) {
@@ -367,6 +398,7 @@ export default {
       this.visible = true
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       getTeacherPageList(this.listQuery)
         .then(response => {

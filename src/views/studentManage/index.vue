@@ -288,9 +288,40 @@ export default {
     }
   },
   created() {
+    this.getPagePars()
     this.getList()
   },
   methods: {
+    getPagePars() {
+      const { pagePars } = this.$store.getters
+      const path = this.$route.path
+      if (pagePars.has(path)) {
+        const { currentPage, pageSize, filter } = pagePars.get(path)
+        this.listQuery = {
+          currentPage,
+          pageSize,
+          stuName: filter.stuName,
+          stuNumber: filter.stuNumber,
+          stuDept: filter.stuDept
+        }
+        return true
+      } else {
+        return false
+      }
+    },
+    savePagePars() {
+      const path = this.$route.path
+      const pars = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize,
+        filter: {
+          stuName: this.listQuery.stuName,
+          stuNumber: this.listQuery.stuNumber,
+          stuDept: this.listQuery.stuDept
+        }
+      }
+      this.$store.dispatch('pagePars/savePagePars', { path, pars })
+    },
     uploadSuccess(response) {
       const { message, data } = response.data
       if (message && data) {
@@ -313,6 +344,7 @@ export default {
       this.listQuery.pageSize = val
     },
     getList() {
+      this.savePagePars()
       this.listLoading = true
       getStudentPageList(this.listQuery)
         .then(response => {
