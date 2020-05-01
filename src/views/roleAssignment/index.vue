@@ -250,6 +250,8 @@ export default {
             })
             this.getList()
           })
+      }).catch(() => {
+
       })
     }
   }
