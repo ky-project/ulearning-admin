@@ -27,7 +27,7 @@
             <svg-icon icon-class="wendang" class-name="icon" />
             <div class="content">
               <p>文件系统</p>
-              <p><span>{{ fileSize }}</span>MB</p>
+              <p><span>{{ fileSize }}</span></p>
             </div>
           </el-card>
         </el-col>
@@ -156,7 +156,7 @@ export default {
     getSumFileSize() {
       getSumFileSize()
         .then(response => {
-          this.fileSize = parseFloat(response.data)
+          this.fileSize = response.data
         })
     },
     getTodayTraffic() {
