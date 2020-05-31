@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.courseName" size="small" placeholder="课程号" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.courseNumber" size="small" placeholder="课程名" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.courseName" size="small" placeholder="课程名" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.courseNumber" size="small" placeholder="课程号" style="width: 200px;" class="filter-item" />
       <el-button v-waves class="filter-item" size="small" round type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
