@@ -111,7 +111,7 @@
           <span>{{ row.teaEmail }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button
             v-permission="['teacher:saveAssignedRole']"
@@ -130,6 +130,15 @@
             @click="handleUpdate(row)"
           >
             修改
+          </el-button>
+          <el-button
+            v-permission="['teacher:updatePasswordById']"
+            type="primary"
+            size="mini"
+            round
+            @click="handleUpdatePassword(row)"
+          >
+            修改密码
           </el-button>
           <el-button
             v-permission="['teacher:delete']"
@@ -237,6 +246,36 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+      v-el-drag-dialog
+      title="修改密码"
+      :visible.sync="updatePasswordDialogFormVisible"
+    >
+      <el-form
+        ref="updatePasswordForm"
+        :rules="updatePasswordRules"
+        :model="updatePasswordTemp"
+        size="small"
+        label-position="left"
+        label-width="100px"
+      >
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input type="password" v-model="updatePasswordTemp.newPassword" />
+        </el-form-item>
+        <el-form-item label="新密码确认" prop="repeatNewPassword">
+          <el-input type="password" v-model="updatePasswordTemp.repeatNewPassword" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="updatePasswordDialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="updatePassword()">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -246,7 +285,7 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { isEmail, isPhone } from '@/utils/validate'
 import PopTransfer from '@/components/PopTransfer'
-import { getTeacherPageList, updateTeacher, addTeacher, deleteTeacher, getAssignedRole, saveAssignedRole } from '@/api/teacher-manage'
+import { updatePasswordById, getTeacherPageList, updateTeacher, addTeacher, deleteTeacher, getAssignedRole, saveAssignedRole } from '@/api/teacher-manage'
 import { getRolesList } from '@/api/role-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -296,6 +335,12 @@ export default {
         teaPhone: '',
         teaEmail: ''
       },
+      updatePasswordTemp: {
+        id: '',
+        newPassword: '',
+        repeatNewPassword: '',
+      },
+      updatePasswordDialogFormVisible: false,
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -310,6 +355,10 @@ export default {
         // teaTitle: [{ required: true, message: '请输入职称', trigger: 'blur' }],
         teaPhone: [{ required: false, validator: checkPhone, trigger: 'blur' }],
         teaEmail: [{ required: false, validator: checkEmail, trigger: 'blur' }]
+      },
+      updatePasswordRules: {
+        newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+        repeatNewPassword: [{ required: true, message: '请确认新密码', trigger: 'blur' }]
       },
       // 穿梭框参数
       visible: false,
@@ -519,6 +568,43 @@ export default {
     },
     indexMethod(index) {
       return (index + 1) + (this.listQuery.currentPage - 1) * this.listQuery.pageSize
+    },
+    resetUpdatePasswordTemp() {
+      this.updatePasswordTemp = {
+        id: '',
+        newPassword: '',
+        repeatNewPassword: ''
+      }
+    },
+    handleUpdatePassword(row) {
+      this.resetUpdatePasswordTemp()
+      this.updatePasswordTemp.id = row.id
+      this.updatePasswordDialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['updatePasswordForm'].clearValidate()
+      })
+    },
+    updatePassword() {
+      this.$refs['updatePasswordForm'].validate((valid) => {
+        if(valid){
+          if(this.updatePasswordTemp.newPassword !== this.updatePasswordTemp.repeatNewPassword){
+            this.$message({
+              message: '输入的两次密码不一致',
+              type: 'warning'
+            });
+          } else {
+            updatePasswordById(this.updatePasswordTemp)
+              .then(response => {
+                this.$message({
+                  type: 'success',
+                  message: '学生密码修改成功'
+                })
+                this.getList()
+                this.updatePasswordDialogFormVisible = false
+              })
+          }
+        }
+      })
     }
     /* handleFetchPv(pv) {
       fetchPv(pv).then(response => {

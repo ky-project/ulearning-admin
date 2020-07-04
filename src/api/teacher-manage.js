@@ -69,3 +69,12 @@ export function saveAssignedRole(data) {
     data: qs.stringify(data)
   })
 }
+
+// 修改教师密码
+export function updatePasswordById(data) {
+  return request({
+    url: `/system-manage/teacher/updatePasswordById`,
+    method: 'POST',
+    data: qs.stringify(data)
+  })
+}

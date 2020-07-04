@@ -36,3 +36,12 @@ export function getStudentPageList(data) {
     method: 'GET'
   })
 }
+
+// 修改学生密码
+export function updatePasswordById(data) {
+  return request({
+    url: `/system-manage/student/updatePasswordById`,
+    method: 'POST',
+    data: qs.stringify(data)
+  })
+}
