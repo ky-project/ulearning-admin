@@ -100,6 +100,9 @@
           <el-button v-permission="['teachingTask:update']" round type="primary" size="mini" @click="handleUpdate(row)">
             修改
           </el-button>
+          <el-button v-permission="['teachingTask:update']" round :type="row.taskStatus ? 'danger' : 'primary'" size="mini" @click="handleUpdateStatus(row)">
+            {{ row.taskStatus ? "停用":"启用" }}
+          </el-button>
           <el-button v-permission="['teachingTask:delete']" round size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
@@ -193,9 +196,9 @@
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 // import { isEmail, isPhone } from '@/utils/validate'
-import { getTaskPageList, updateTask, addTask, deleteTask, getTermList } from '@/api/teaching-task-manage'
-import { getAllCourse } from '@/api/course-manage'
-import { getAllTeacher } from '@/api/teacher-manage'
+import {addTask, deleteTask, getTaskPageList, getTermList, updateTask} from '@/api/teaching-task-manage'
+import {getAllCourse} from '@/api/course-manage'
+import {getAllTeacher} from '@/api/teacher-manage'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import elDragDialog from '@/directive/el-drag-dialog'
 
@@ -384,6 +387,25 @@ export default {
               this.dialogFormVisible = false
             })
         }
+      })
+    },
+    handleUpdateStatus(row) {
+      const newStatus = row.taskStatus ? '停用' : '启用'
+      this.$confirm('确定' + newStatus + '该教学任务, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        updateTask({ id: row.id, taskStatus: !row.taskStatus })
+          .then(response => {
+            this.$message({
+              type: 'success',
+              message: '教师信息' + newStatus + '成功'
+            })
+            this.getList()
+          })
+      }).catch(() => {
+
       })
     },
     handleDelete(row, index) {
