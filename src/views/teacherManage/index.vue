@@ -76,7 +76,7 @@
         width="50"
         :index="indexMethod"
       />
-      <el-table-column label="工号" prop="teaNumber" align="center" width="120">
+      <el-table-column label="工号" prop="teaNumber" align="center" width="100">
         <template slot-scope="{row}">
           <span>{{ row.teaNumber }}</span>
         </template>
@@ -106,7 +106,7 @@
           <span>{{ row.teaPhone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" align="center" min-width="200">
+      <el-table-column label="邮箱" align="center" min-width="160">
         <template slot-scope="{row}">
           <span>{{ row.teaEmail }}</span>
         </template>
