@@ -85,9 +85,16 @@
           <span>{{ row.teacher.teaName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开课学期" min-width="120" align="center">
+      <el-table-column label="开课学期" min-width="80" align="center">
         <template slot-scope="{row}">
           <span>{{ row.term }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" width="80" align="center">
+        <template slot-scope="{row}">
+          <el-tag :type="row.taskStatus ? 'success' : 'danger'">
+            <span>{{ row.taskStatus ? "启用":"停用" }}</span>
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" min-width="100" align="center">
@@ -95,7 +102,7 @@
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="140" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-permission="['teachingTask:update']" round type="primary" size="mini" @click="handleUpdate(row)">
             修改
